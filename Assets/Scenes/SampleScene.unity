@@ -1123,7 +1123,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 160s
+  m_Text: -s
 --- !u!222 &205563975
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2741,7 +2741,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Level 45
+  m_Text: Level -
 --- !u!222 &541258215
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4400,9 +4400,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '160
-
-'
+  m_Text: '-'
 --- !u!222 &937000796
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4925,6 +4923,53 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 3
   m_TargetDisplay: 0
+--- !u!1 &989456862
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 989456863}
+  - component: {fileID: 989456864}
+  m_Layer: 0
+  m_Name: GameUIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &989456863
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 989456862}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.12654404, y: -0.10957337, z: 0.043238606}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &989456864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 989456862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0e64aabb5d55f04ca83d888d9a34aee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _levelText: {fileID: 541258214}
+  _timerText: {fileID: 205563974}
+  _starCountsText: {fileID: 937000795}
 --- !u!1 &1025117975
 GameObject:
   m_ObjectHideFlags: 0
@@ -9643,3 +9688,4 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 1510464788}
   - {fileID: 748031809}
+  - {fileID: 989456863}
