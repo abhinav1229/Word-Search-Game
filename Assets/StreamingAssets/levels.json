@@ -1,0 +1,12 @@
+{
+    "levels": [
+        {
+            "levelName": 1,
+            "words": ["apple", "banana", "cherry", "peeku"]
+        },
+        {
+            "levelName": 2,
+            "words": ["dog", "cat", "fish"]
+        }
+    ]
+}

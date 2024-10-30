@@ -22,13 +22,15 @@ public class GameManager : MonoBehaviour
 
     private void UpdateListOfCurrentLevelWords()
     {
-        _currentLevelWords = new(){"hello", "prime"};
+        _currentLevelWords = GameData.Instance.GetLevelData(GameData.UnlockedLevel);
     }
 
     private void AddWordsOnWordsContainer()
     {
         // load the prefab from the resource to instatiate
         GameObject wordObjectMain = Resources.Load("WordText") as GameObject;
+
+        Debug.Log($"Level {GameData.UnlockedLevel} has {_currentLevelWords.Count} words.");
 
         // Instantiate the wordObjects 
         foreach (string wordText in _currentLevelWords)
