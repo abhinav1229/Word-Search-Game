@@ -1,5 +1,8 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandler, IPointerDownHandler, IPointerUpHandler
 {
@@ -11,15 +14,23 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
     private RectTransform _drawLineRect;
     private int _lastDirection = 0;
     private Vector2Int _cellSize;
-    private readonly float _cellsGapInX = 10;
-    private readonly float _cellsGapInY = 5;
+    private float _cellsGapInX = 10;
+    private float _cellsGapInY = 5;
     private Vector2 _drawLineDefaultSize = new(80, 80);
     private string _firstLetterName;
+
+    private List<char> _selectedLetters = new();
 
     private void Start()
     {
         _drawLineRect = _drawLine.GetComponent<RectTransform>();
         _cellSize = GameData.Instance.GetLevelBoardCellSize(GameData.UnlockedLevel);
+
+        if (GameData.UnlockedLevel > 20)
+        {
+            _cellsGapInY = 0;
+        }
+
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -36,12 +47,19 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
         Vector2 drawLineSizeRect = _drawLineRect.sizeDelta;
         int direction = GetDirection(_lastDraggedLetter.name, currentDraggedLetter.name);
 
+        if (direction == -1)
+        {
+            return;
+        }
+
         int directionChangeMultiplier = 1;
 
         Debug.Log("Dragging on direction: " + direction);
 
         if (_lastDirection != direction)
         {
+            Debug.Log("HaveCrossed: " + HaveCrossedToTheStartLetter(currentDraggedLetter.name, direction) + " | " + HaveReachedToTheStartLetter(currentDraggedLetter.name, _firstLetterName) + " | " + _lastDirection);
+
             if (HaveCrossedToTheStartLetter(currentDraggedLetter.name, direction) || _lastDirection == 0)
             {
                 Vector3 dragLineAnchors = _drawLineRect.anchoredPosition;
@@ -62,19 +80,28 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
                     _drawLine.GetComponent<RectTransform>().pivot = new Vector2(1, 0.5f);
                     dragLineAnchors.y += _lastDirection == 0 ? 40 : 80;
                 }
-                else
+                else if(direction == 4)
                 {
                     _drawLine.transform.eulerAngles = new Vector3(0, 0, 90);
                     _drawLine.GetComponent<RectTransform>().pivot = new Vector2(0, 0.5f);
                     dragLineAnchors.y -= _lastDirection == 0 ? 40 : 80;
                 }
 
-                _drawLineRect.anchoredPosition = dragLineAnchors;                
+                _drawLineRect.anchoredPosition = dragLineAnchors;
                 _lastDirection = direction;
             }
             else
             {
                 directionChangeMultiplier = -1;
+            }
+
+            if (HaveReachedToTheStartLetter(currentDraggedLetter.name, _firstLetterName))
+            {
+                _drawLine.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.5f);
+                _drawLine.transform.eulerAngles = new Vector3(0, 0, 0);
+                _drawLineRect.anchoredPosition = currentDraggedLetter.GetComponent<RectTransform>().anchoredPosition;
+
+                _lastDirection = 0;
             }
         }
 
@@ -96,30 +123,44 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
             drawLineSizeRect.x += (_cellSize.y + _cellsGapInY) * directionChangeMultiplier;
         }
 
+        if (directionChangeMultiplier == 1)
+        {
+            _selectedLetters.Add(currentDraggedLetter.GetComponent<Text>().text[0]);
+        }
+        else
+        {
+            _selectedLetters.RemoveAt(_selectedLetters.Count - 1);
+        }
+
         _drawLineRect.sizeDelta = drawLineSizeRect;
         _lastDraggedLetter = currentDraggedLetter;
     }
 
     private bool HaveCrossedToTheStartLetter(string draggingObjectName, int direction)
     {
-        if(direction == 1)
+        if (direction == 1)
         {
             return int.Parse(draggingObjectName.Split('_')[2]) > int.Parse(_firstLetterName.Split('_')[2]);
         }
-        else if(direction == 2)
+        else if (direction == 2)
         {
             return int.Parse(draggingObjectName.Split('_')[2]) < int.Parse(_firstLetterName.Split('_')[2]);
         }
-        else if(direction == 3)
+        else if (direction == 3)
         {
             return int.Parse(draggingObjectName.Split('_')[1]) > int.Parse(_firstLetterName.Split('_')[1]);
         }
-        else if(direction == 4)
+        else if (direction == 4)
         {
             return int.Parse(draggingObjectName.Split('_')[1]) < int.Parse(_firstLetterName.Split('_')[1]);
         }
 
         return false;
+    }
+
+    public bool HaveReachedToTheStartLetter(string current, string last)
+    {
+        return current.Equals(last);
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -137,6 +178,8 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
         _drawLineRect.sizeDelta = _drawLineDefaultSize;
         _drawLineRect.anchoredPosition = letterAnchors;
         _lastDraggedLetter = rayCastedObject;
+
+        _selectedLetters.Add(rayCastedObject.GetComponent<Text>().text[0]);
     }
 
 
@@ -147,6 +190,16 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
         _lastDirection = 0;
         _lastDraggedLetter = null;
         _drawLine.transform.eulerAngles = new Vector3(0, 0, 0);
+
+        string selectedWord = String.Empty;
+        foreach (var item in _selectedLetters)
+        {
+            selectedWord += item;
+        }
+
+        Debug.Log(selectedWord);
+
+        _selectedLetters.Clear();
     }
 
     public int GetDirection(string last, string current)
@@ -159,18 +212,27 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
 
         // Debug.Log($"Last: ({last_row}, {last_col}) | Current: ({curr_row}, {curr_col}) ");
 
+        // Horizontal movement
         if (curr_row == last_row)
         {
-            if (curr_col > last_col) return 1;
-            if (curr_col < last_col) return 2;
+            if (curr_col > last_col) return 1; // Right
+            if (curr_col < last_col) return 2; // Left
         }
 
+        // Vertical movement
         if (curr_col == last_col)
         {
-            if (curr_row > last_row) return 3;
-            if (curr_row < last_row) return 4;
+            if (curr_row > last_row) return 3; // Down
+            if (curr_row < last_row) return 4; // Up
         }
 
-        return -1;
+        // Diagonal movement
+        if (curr_row > last_row && curr_col > last_col) return 5; // Down-Right
+        if (curr_row > last_row && curr_col < last_col) return 6; // Down-Left
+        if (curr_row < last_row && curr_col > last_col) return 7; // Up-Right
+        if (curr_row < last_row && curr_col < last_col) return 8; // Up-Left
+
+        return -1; // No direction matched
     }
+
 }

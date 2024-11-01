@@ -27,7 +27,14 @@ public class GameData : MonoBehaviour
     // Property to get the currently unlocked level from PlayerPrefs
     public static int UnlockedLevel
     {
-        get { return PlayerPrefs.GetInt("UnlockedLevel", 1); }
+        get
+        {
+#if UNITY_EDITOR
+            return 1;
+#else
+            return PlayerPrefs.GetInt("UnlockedLevel", 1);
+#endif
+        }
     }
 
     // Property to get the current star count from PlayerPrefs

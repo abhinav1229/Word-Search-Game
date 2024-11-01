@@ -85,10 +85,19 @@ public class GameManager : MonoBehaviour
             {
                 GameObject boardLetterObject = InstantiateWithParent(_boardLetterPrefab, _boardLetterContainer, false, ObjectNaming.Repeat);
                 boardLetterObject.name += "_" + i + "_" + j;
-                boardLetterObject.GetComponent<Text>().text = _defaultBoardLetter;
+                boardLetterObject.GetComponent<Text>().text = GetRandomLetter();
             }
         }
     }
+
+    private string GetRandomLetter()
+    {
+        // Generate a random number between 65 ('A') and 90 ('Z')
+        int randomAscii = Random.Range(65, 91);
+        // Convert the ASCII value to a character and then to a string
+        return ((char)randomAscii).ToString();
+    }
+
 
     // Instantiates an object, sets its parent, and applies additional options
     private GameObject InstantiateWithParent(GameObject prefab, GameObject parent, bool setAsFirstChild = false, ObjectNaming namingOption = ObjectNaming.Default)
