@@ -110,7 +110,7 @@ public class GameData : MonoBehaviour
         }
         else if (level < 20)
         {
-            return new Vector2Int(8, 4);
+            return new Vector2Int(8, 6);
         }
         return new Vector2Int(9, 8);
     }
