@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -36,6 +37,7 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
     {
 
     }
+
     public void OnDrag(PointerEventData eventData)
     {
         GameObject currentDraggedLetter = eventData.pointerCurrentRaycast.gameObject;
@@ -54,12 +56,22 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
 
         int directionChangeMultiplier = 1;
 
-        Debug.Log("Dragging on direction: " + direction);
+        // Debug.Log("Dragging on direction: " + direction);
+        if (IsTakenWildMove(direction, _lastDirection))
+        {
+            Debug.Log("Dragging wildly");
+            return;
+        }
 
+        if (IsTrickyCrossedStartLetter(currentDraggedLetter.name, direction))
+        {
+            Debug.Log("Dragging Tricky");
+            return;
+        }
+
+        Debug.Log($"Passed: ({_lastDirection},{direction})");
         if (_lastDirection != direction)
         {
-            Debug.Log("HaveCrossed: " + HaveCrossedToTheStartLetter(currentDraggedLetter.name, direction) + " | " + HaveReachedToTheStartLetter(currentDraggedLetter.name, _firstLetterName) + " | " + _lastDirection);
-
             if (HaveCrossedToTheStartLetter(currentDraggedLetter.name, direction) || _lastDirection == 0)
             {
                 Vector3 dragLineAnchors = _drawLineRect.anchoredPosition;
@@ -80,11 +92,19 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
                     _drawLine.GetComponent<RectTransform>().pivot = new Vector2(1, 0.5f);
                     dragLineAnchors.y += _lastDirection == 0 ? 40 : 80;
                 }
-                else if(direction == 4)
+                else if (direction == 4)
                 {
                     _drawLine.transform.eulerAngles = new Vector3(0, 0, 90);
                     _drawLine.GetComponent<RectTransform>().pivot = new Vector2(0, 0.5f);
                     dragLineAnchors.y -= _lastDirection == 0 ? 40 : 80;
+                }
+
+                // diagonals
+                else if (direction == 5)
+                {
+                    _drawLine.transform.eulerAngles = new Vector3(0, 0, -39.3f);
+                    _drawLine.GetComponent<RectTransform>().pivot = new Vector2(0, 0.5f);
+                    dragLineAnchors.y -= _lastDirection == 0 ? 26 : 26;
                 }
 
                 _drawLineRect.anchoredPosition = dragLineAnchors;
@@ -97,6 +117,7 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
 
             if (HaveReachedToTheStartLetter(currentDraggedLetter.name, _firstLetterName))
             {
+                Debug.Log("HaveReachedToTheStartLetter");
                 _drawLine.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.5f);
                 _drawLine.transform.eulerAngles = new Vector3(0, 0, 0);
                 _drawLineRect.anchoredPosition = currentDraggedLetter.GetComponent<RectTransform>().anchoredPosition;
@@ -129,11 +150,60 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
         }
         else
         {
-            _selectedLetters.RemoveAt(_selectedLetters.Count - 1);
+            if (_selectedLetters.Count > 0)
+            {
+                _selectedLetters.RemoveAt(_selectedLetters.Count - 1);
+            }
         }
 
         _drawLineRect.sizeDelta = drawLineSizeRect;
         _lastDraggedLetter = currentDraggedLetter;
+    }
+
+    private bool IsTakenWildMove(int currDirection, int lastDirection)
+    {
+        if (_selectedLetters.Count <= 1) return false;
+
+        if ((lastDirection == 3 || lastDirection == 4) && (currDirection == 1 || currDirection == 2))
+        {
+            return true;
+        }
+        else if ((lastDirection == 1 || lastDirection == 2) && (currDirection == 3 || currDirection == 4))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool IsTrickyCrossedStartLetter(string currentObject, int currDir)
+    {
+        if (_selectedLetters.Count <= 1) return false;
+
+        int first_row = int.Parse(_firstLetterName.Split('_')[1]);
+        int first_col = int.Parse(_firstLetterName.Split('_')[2]);
+
+        int curr_row = int.Parse(currentObject.Split('_')[1]);
+        int curr_col = int.Parse(currentObject.Split('_')[2]);
+
+        if (_selectedLetters.Count <= 2)
+        {
+            if (_lastDirection == 1 && currDir == 2 && curr_col < first_col) return true;
+            if (_lastDirection == 2 && currDir == 1 && curr_col > first_col) return true;
+
+            if (_lastDirection == 3 && currDir == 4 && curr_row < first_row) return true;
+            if (_lastDirection == 4 && currDir == 3 && curr_row > first_row) return true;
+        }
+        else 
+        {
+            if (_lastDirection == 1 && currDir == 2 && curr_col <= first_col) return true;
+            if (_lastDirection == 2 && currDir == 1 && curr_col >= first_col) return true;
+
+            if (_lastDirection == 3 && currDir == 4 && curr_row <= first_row) return true;
+            if (_lastDirection == 4 && currDir == 3 && curr_row >= first_row) return true;
+        }
+
+        return false;
     }
 
     private bool HaveCrossedToTheStartLetter(string draggingObjectName, int direction)
@@ -227,10 +297,10 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
         }
 
         // Diagonal movement
-        if (curr_row > last_row && curr_col > last_col) return 5; // Down-Right
-        if (curr_row > last_row && curr_col < last_col) return 6; // Down-Left
-        if (curr_row < last_row && curr_col > last_col) return 7; // Up-Right
-        if (curr_row < last_row && curr_col < last_col) return 8; // Up-Left
+        // if (curr_row > last_row && curr_col > last_col) return 5; // Down-Right
+        // if (curr_row > last_row && curr_col < last_col) return 6; // Down-Left
+        // if (curr_row < last_row && curr_col > last_col) return 7; // Up-Right
+        // if (curr_row < last_row && curr_col < last_col) return 8; // Up-Left
 
         return -1; // No direction matched
     }
