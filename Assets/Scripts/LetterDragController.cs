@@ -69,7 +69,7 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
             return;
         }
 
-        Debug.Log($"Passed: ({_lastDirection},{direction})");
+        // Debug.Log($"Passed: ({_lastDirection},{direction})");
         if (_lastDirection != direction)
         {
             if (HaveCrossedToTheStartLetter(currentDraggedLetter.name, direction) || _lastDirection == 0)
