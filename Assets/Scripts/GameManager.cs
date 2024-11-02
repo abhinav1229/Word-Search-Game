@@ -10,10 +10,25 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject _wordsContainer;
     [SerializeField] private GameObject _boardLetterContainer;
 
-    private List<string> _currentLevelWords = new();  // Words for the current level
+    [HideInInspector] public List<string> _currentLevelWords = new();  // Words for the current level
     private GameObject _boardLetterPrefab;
     private GameObject _wordObjectPrefab;
     private string _defaultBoardLetter = "A"; // Default text for board letters
+
+    public static GameManager instance;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(instance);
+        }
+    }
+
 
     private void OnEnable()
     {
@@ -291,6 +306,17 @@ public class GameManager : MonoBehaviour
 
         // Convert the ASCII value to a character and then to a string
         return ((char)randomAscii).ToString();
+    }
+
+    public void MarkWordAsFound(string matchedWord)
+    {
+        foreach (Transform word in _wordsContainer.transform)
+        {
+            if(word.GetComponent<Text>().text.Equals(matchedWord))
+            {
+                word.GetChild(0).gameObject.SetActive(true);
+            }
+        }
     }
 
 

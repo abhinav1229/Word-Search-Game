@@ -9,6 +9,7 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
 {
     [Header("--- GameObjects ---")]
     [SerializeField] private GameObject _drawLine;
+    [SerializeField] private GameObject _matchedDrawLine;
 
 
     private GameObject _lastDraggedLetter;
@@ -255,12 +256,6 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        _drawLineRect.pivot = new Vector2(0.5f, 0.5f);
-        _drawLineRect.sizeDelta = Vector2.zero;
-        _lastDirection = 0;
-        _lastDraggedLetter = null;
-        _drawLine.transform.eulerAngles = new Vector3(0, 0, 0);
-
         string selectedWord = String.Empty;
         foreach (var item in _selectedLetters)
         {
@@ -268,6 +263,18 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
         }
 
         Debug.Log(selectedWord);
+        string matchedWord = GameManager.instance._currentLevelWords.Find((word) => word.Equals(selectedWord));
+        if(matchedWord != null)
+        {
+            GameManager.instance.MarkWordAsFound(matchedWord);
+            GameObject drawLineForMatchedWord = Instantiate(_drawLine, _matchedDrawLine.transform);
+        }
+
+        _drawLineRect.pivot = new Vector2(0.5f, 0.5f);
+        _drawLineRect.sizeDelta = Vector2.zero;
+        _lastDirection = 0;
+        _lastDraggedLetter = null;
+        _drawLine.transform.eulerAngles = new Vector3(0, 0, 0);
 
         _selectedLetters.Clear();
     }

@@ -1101,7 +1101,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 948606551}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1111,7 +1111,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 950, y: 950}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &989019059
 GameObject:
@@ -1252,6 +1252,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _drawLine: {fileID: 1634002560}
+  _matchedDrawLine: {fileID: 948606551}
 --- !u!114 &989019067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1843,6 +1844,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _wordsContainer: {fileID: 241666000}
   _boardLetterContainer: {fileID: 989019059}
+  _currentLevelWords: []
 --- !u!1 &2055416594
 GameObject:
   m_ObjectHideFlags: 0
