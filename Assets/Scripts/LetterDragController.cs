@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -21,7 +20,10 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
     private Vector2 _drawLineDefaultSize = new(80, 80);
     private string _firstLetterName;
 
-    private List<char> _selectedLetters = new();
+    private Color32 _defaultColor = new Color32(50, 50, 50, 255);
+    private Color32 _selectedColor = new Color32(255, 255, 255, 255);
+
+    private List<GameObject> _selectedLetters = new();
 
     private void Start()
     {
@@ -147,13 +149,15 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
 
         if (directionChangeMultiplier == 1)
         {
-            _selectedLetters.Add(currentDraggedLetter.GetComponent<Text>().text[0]);
+            _selectedLetters.Add(currentDraggedLetter);
+            currentDraggedLetter.GetComponent<Text>().color = _selectedColor;
         }
         else
         {
             if (_selectedLetters.Count > 0)
             {
                 _selectedLetters.RemoveAt(_selectedLetters.Count - 1);
+                _lastDraggedLetter.GetComponent<Text>().color = _defaultColor;
             }
         }
 
@@ -195,7 +199,7 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
             if (_lastDirection == 3 && currDir == 4 && curr_row < first_row) return true;
             if (_lastDirection == 4 && currDir == 3 && curr_row > first_row) return true;
         }
-        else 
+        else
         {
             if (_lastDirection == 1 && currDir == 2 && curr_col <= first_col) return true;
             if (_lastDirection == 2 && currDir == 1 && curr_col >= first_col) return true;
@@ -245,12 +249,16 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
         }
         _firstLetterName = rayCastedObject.name;
 
+        rayCastedObject.GetComponent<Text>().color = _selectedColor;
+
         Vector3 letterAnchors = rayCastedObject.GetComponent<RectTransform>().anchoredPosition3D;
         _drawLineRect.sizeDelta = _drawLineDefaultSize;
         _drawLineRect.anchoredPosition = letterAnchors;
+        _drawLine.GetComponent<Image>().color = GetRandomColor();
+
         _lastDraggedLetter = rayCastedObject;
 
-        _selectedLetters.Add(rayCastedObject.GetComponent<Text>().text[0]);
+        _selectedLetters.Add(rayCastedObject);
     }
 
 
@@ -259,15 +267,23 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
         string selectedWord = String.Empty;
         foreach (var item in _selectedLetters)
         {
-            selectedWord += item;
+            selectedWord += item.GetComponent<Text>().text;
+            item.GetComponent<Text>().color = _defaultColor;
         }
 
         Debug.Log(selectedWord);
         string matchedWord = GameManager.instance._currentLevelWords.Find((word) => word.Equals(selectedWord));
-        if(matchedWord != null)
+        if (matchedWord != null)
         {
             GameManager.instance.MarkWordAsFound(matchedWord);
             GameObject drawLineForMatchedWord = Instantiate(_drawLine, _matchedDrawLine.transform);
+            drawLineForMatchedWord.GetComponent<Canvas>().sortingOrder = 1;
+
+            foreach (var item in _selectedLetters)
+            {
+                selectedWord += item.GetComponent<Text>().text;
+                item.GetComponent<Text>().color = _selectedColor;
+            }
         }
 
         _drawLineRect.pivot = new Vector2(0.5f, 0.5f);
@@ -310,6 +326,33 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
         // if (curr_row < last_row && curr_col < last_col) return 8; // Up-Left
 
         return -1; // No direction matched
+    }
+
+    public static Color32 GetRandomColor()
+    {
+        Color32[] lightColors = new Color32[]
+{
+    new Color32(180, 180, 180, 255), // Light Gray
+    new Color32(200, 200, 200, 255), // Soft Gray
+    new Color32(190, 180, 170, 255), // Light Taupe
+    new Color32(170, 190, 200, 255), // Light Slate Blue
+    new Color32(180, 200, 180, 255), // Soft Green
+    new Color32(160, 170, 190, 255), // Light Steel Blue
+    new Color32(200, 180, 160, 255), // Light Sand
+    new Color32(190, 170, 190, 255), // Soft Lavender
+    new Color32(200, 190, 160, 255), // Light Olive
+    new Color32(160, 190, 200, 255), // Soft Teal
+    new Color32(180, 160, 180, 255), // Soft Lilac
+    new Color32(200, 160, 160, 255), // Soft Rose
+    new Color32(190, 170, 160, 255), // Light Beige
+    new Color32(180, 160, 140, 255), // Light Tan
+    new Color32(170, 160, 200, 255)  // Soft Mauve
+};
+
+
+
+        int index = UnityEngine.Random.Range(0, lightColors.Length);
+        return lightColors[index];
     }
 
 }

@@ -2,11 +2,11 @@
     "levels": [
         {
             "levelName": 1,
-            "words": ["owl", "sun", "pig", "ten"]
+            "words": ["OWL", "SUN", "PIG", "TEN"]
         },
         {
             "levelName": 2,
-            "words": ["dog", "cat", "fish"]
+            "words": ["DOG", "CAT", "FISH"]
         }
     ]
 }

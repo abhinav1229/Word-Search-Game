@@ -130,7 +130,7 @@ public class GameManager : MonoBehaviour
                 else
                 {
                     letterObjects[k].GetComponentInChildren<Text>().text = grid[i, j].ToString();
-                    letterObjects[k].GetComponentInChildren<Text>().color = Color.red;
+                    // letterObjects[k].GetComponentInChildren<Text>().color = Color.red;
                 }
 
                 k++;
