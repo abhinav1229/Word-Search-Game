@@ -319,6 +319,21 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public bool IsMarkedTheWord(string matchedWord)
+    {
+        bool isActive = false;
+        foreach (Transform word in _wordsContainer.transform)
+        {
+            if(word.GetComponent<Text>().text.Equals(matchedWord))
+            {
+                isActive = word.GetChild(0).gameObject.activeInHierarchy;
+                break;
+            }
+        }
+
+        return isActive;
+    }
+
 
     // Instantiates an object, sets its parent, and applies additional options
     private GameObject InstantiateWithParent(GameObject prefab, GameObject parent, bool setAsFirstChild = false, ObjectNaming namingOption = ObjectNaming.Default)
