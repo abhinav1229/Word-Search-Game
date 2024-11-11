@@ -1,12 +1,56 @@
 {
     "levels": [
-        {
-            "levelName": 1,
-            "words": ["OWL", "SUN", "PIG", "TEN"]
-        },
-        {
-            "levelName": 2,
-            "words": ["DOG", "CAT", "FISH"]
-        }
+        { "levelName": 1, "words": ["OWL", "SUN", "PIG", "TEN"] },
+        { "levelName": 2, "words": ["DOG", "CAT", "FISH"] },
+        { "levelName": 3, "words": ["BEE", "FOX", "COW", "BAT"] },
+        { "levelName": 4, "words": ["ANT", "EEL", "LION", "BEAR"] },
+        { "levelName": 5, "words": ["GOAT", "DEER", "FROG", "RAT"] },
+        { "levelName": 6, "words": ["WOLF", "CRAB", "MOLE", "SEAL"] },
+        { "levelName": 7, "words": ["SHARK", "TIGER", "HORSE"] },
+        { "levelName": 8, "words": ["MONKEY", "SNAKE", "MOUSE"] },
+        { "levelName": 9, "words": ["PANDA", "KOALA", "CROW", "HUMAN"] },
+        { "levelName": 10, "words": ["DOLPHIN", "BUFFALO", "ROOSTER"] },
+
+        { "levelName": 11, "words": ["OTTER", "JAGUAR", "RABBIT", "COUGAR", "DOG", "CAT"] },
+        { "levelName": 12, "words": ["LEOPARD", "OSTRICH", "PARROT", "BEAR", "OWL"] },
+        { "levelName": 13, "words": ["CROCODILE", "PELICAN", "ELEPHANT", "FOX", "TIGER"] },
+        { "levelName": 14, "words": ["HIPPOPOTAMUS", "CATERPILLAR", "BUTTERFLY", "WOLF"] },
+        { "levelName": 15, "words": ["CHAMELEON", "PORCUPINE", "SQUIRREL", "FISH", "MOUSE"] },
+        { "levelName": 16, "words": ["WOODPECKER", "FLAMINGO", "SCORPION", "LION", "EEL"] },
+        { "levelName": 17, "words": ["PLATYPUS", "RHINOCEROS", "ARMADILLO", "OWL", "SEAL"] },
+        { "levelName": 18, "words": ["GIRAFFE", "ANTELOPE", "WOMBAT", "MONKEY", "KOALA"] },
+        { "levelName": 19, "words": ["PANGOLIN", "DRAGONFLY", "FIREFLY", "CROW", "CRAB"] },
+        { "levelName": 20, "words": ["WALLABY", "JELLYFISH", "ALBATROSS", "BAT", "RAT"] },
+        { "levelName": 21, "words": ["ORANGUTAN", "SALAMANDER", "CHIMPANZEE", "GOAT", "BEE"] },
+        { "levelName": 22, "words": ["CATERPILLAR", "GECKO", "TARANTULA", "SHARK", "LION"] },
+        { "levelName": 23, "words": ["COCKROACH", "BUTTERFLY", "OPOSSUM", "COW", "HUMAN"] },
+        { "levelName": 24, "words": ["PRAYINGMANTIS", "ANACONDA", "IGUANA", "HORSE", "OWL"] },
+        { "levelName": 25, "words": ["MOLE", "HYENA", "FROG", "SQUIRREL", "DOG"] },
+
+        { "levelName": 26, "words": ["ZEBRA", "POLARBEAR", "PYTHON", "RABBIT", "KOALA"] },
+        { "levelName": 27, "words": ["BISON", "OCTOPUS", "MANDRILL", "ANTEATER", "LEOPARD"] },
+        { "levelName": 28, "words": ["FERRET", "SEAURCHIN", "MARMOT", "PENGUIN", "ELEPHANT"] },
+        { "levelName": 29, "words": ["LIZARD", "QUOKKA", "LOBSTER", "DUGONG", "FLAMINGO"] },
+        { "levelName": 30, "words": ["CHIPMUNK", "GAZELLE", "GORILLA", "VULTURE", "WOODPECKER"] },
+        { "levelName": 31, "words": ["CHINCHILLA", "SALAMANDER", "SLOTH", "FALCON", "SCORPION"] },
+        { "levelName": 32, "words": ["OPOSSUM", "COYOTE", "WOMBAT", "RHINOCEROS", "GIRAFFE"] },
+        { "levelName": 33, "words": ["OKAPI", "MEERKAT", "PEACOCK", "VULTURE", "TORTOISE"] },
+        { "levelName": 34, "words": ["MOOSE", "TURTLE", "PLATYPUS", "OTTER", "ALLIGATOR"] },
+        { "levelName": 35, "words": ["CARACAL", "KOOKABURRA", "POSSUM", "KANGAROO", "BEETLE"] },
+        { "levelName": 36, "words": ["JAGUAR", "PUMA", "MINK", "HEDGEHOG", "TOUCAN"] },
+        { "levelName": 37, "words": ["FALCON", "KUDU", "SWAN", "CHAMELEON", "PORCUPINE"] },
+        { "levelName": 38, "words": ["CASSOWARY", "WOLVERINE", "ORANGUTAN", "MANDRILL", "OPOSSUM"] },
+        { "levelName": 39, "words": ["SPIDER", "LOBSTER", "BARRACUDA", "POLARBEAR", "CHIPMUNK"] },
+        { "levelName": 40, "words": ["EAGLE", "PYTHON", "GECKO", "SLOTH", "DRAGONFLY"] },
+        { "levelName": 41, "words": ["WARTHOG", "EMU", "CROCODILE", "JELLYFISH", "HEDGEHOG"] },
+        { "levelName": 42, "words": ["BONOBO", "KOALA", "ALLIGATOR", "TORTOISE", "QUOKKA"] },
+        { "levelName": 43, "words": ["DINGO", "TAPIR", "LEMUR", "PELICAN", "MOOSE"] },
+        { "levelName": 44, "words": ["GORILLA", "IGUANA", "PARROT", "LIZARD", "SNAKE"] },
+        { "levelName": 45, "words": ["MANTIS", "OSTRICH", "PANGOLIN", "FERRET", "CHIMPANZEE"] },
+        { "levelName": 46, "words": ["ELEPHANT", "HARE", "KOOKABURRA", "TAMARIN", "LORIKEET"] },
+        { "levelName": 47, "words": ["MACAW", "LORIS", "BADGER", "CASSOWARY", "WOMBAT"] },
+        { "levelName": 48, "words": ["SPARROW", "CHINCHILLA", "WEASEL", "BADGER", "EMU"] },
+        { "levelName": 49, "words": ["HUMMINGBIRD", "TORTOISE", "GIRAFFE", "TARANTULA", "MONGOOSE"] },
+        { "levelName": 50, "words": ["ALBATROSS", "WALLABY", "QUAIL", "FIREFLY", "WOLVERINE"] }
     ]
 }

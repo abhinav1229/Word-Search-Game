@@ -89,18 +89,13 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
                         dragLineAnchors.y += _lastDirection == 3 ? -40 : 40;
                         dragLineAnchors.x += 40;
                         drawLineSizeRect.x -= (_cellSize.y + _cellsGapInY) * (_selectedLetters.Count - 1);
-
-
-                        SetLetterInDirection(direction, distanceMultiplier);
                     }
                     else if (_lastDirection == 2)
                     {
                         drawLineSizeRect.x -= (_cellSize.x + _cellsGapInX) * (_selectedLetters.Count - 1);
-
-                        SetLetterInDirection(direction, distanceMultiplier);
                     }
 
-
+                    SetLetterInDirection(direction, distanceMultiplier);
                 }
                 else if (direction == 2)
                 {
@@ -115,15 +110,13 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
                         dragLineAnchors.y += _lastDirection == 3 ? -40 : 40;
                         dragLineAnchors.x -= 40;
                         drawLineSizeRect.x -= (_cellSize.y + _cellsGapInY) * (_selectedLetters.Count - 1);
-
-                        SetLetterInDirection(direction, distanceMultiplier);
                     }
                     else if (_lastDirection == 1)
                     {
                         drawLineSizeRect.x -= (_cellSize.x + _cellsGapInX) * (_selectedLetters.Count - 1);
 
-                        SetLetterInDirection(direction, distanceMultiplier);
                     }
+                    SetLetterInDirection(direction, distanceMultiplier);
 
                 }
                 else if (direction == 3)
@@ -137,15 +130,12 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
                         dragLineAnchors.y -= 40;
                         dragLineAnchors.x += _lastDirection == 1 ? 40 : -40;
                         drawLineSizeRect.x -= (_cellSize.x + _cellsGapInX) * (_selectedLetters.Count - 1);
-
-                        SetLetterInDirection(direction, distanceMultiplier);
                     }
                     else if (_lastDirection == 4)
                     {
                         drawLineSizeRect.x -= (_cellSize.y + _cellsGapInY) * (_selectedLetters.Count - 1);
-
-                        SetLetterInDirection(direction, distanceMultiplier);
                     }
+                    SetLetterInDirection(direction, distanceMultiplier);
 
                 }
                 else if (direction == 4)
@@ -159,15 +149,12 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
                         dragLineAnchors.y += 40;
                         dragLineAnchors.x += _lastDirection == 1 ? 40 : -40;
                         drawLineSizeRect.x -= (_cellSize.x + _cellsGapInX) * (_selectedLetters.Count - 1);
-
-                        SetLetterInDirection(direction, distanceMultiplier);
                     }
                     else if (_lastDirection == 3)
                     {
                         drawLineSizeRect.x -= (_cellSize.y + _cellsGapInY) * (_selectedLetters.Count - 1);
-
-                        SetLetterInDirection(direction, distanceMultiplier);
                     }
+                    SetLetterInDirection(direction, distanceMultiplier);
                 }
 
                 _drawLineRect.anchoredPosition = dragLineAnchors;
@@ -188,8 +175,24 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
                 _drawLine.transform.eulerAngles = new Vector3(0, 0, 0);
                 _drawLineRect.anchoredPosition = currentDraggedLetter.GetComponent<RectTransform>().anchoredPosition;
 
+                drawLineSizeRect.x = 80;
+                drawLineSizeRect.y = 80;
+
+                direction = -1;
                 _lastDirection = 0;
+
+                foreach (GameObject letter in _selectedLetters)
+                {
+                    if (letter.name.Contains("_MATCHED") || letter.name.Equals(currentDraggedLetter.name)) continue;
+                    letter.GetComponent<Text>().color = _defaultColor;
+                }
             }
+        }
+        else
+        {
+            distanceMultiplier = GetDistanceBetweenCurrentAndFirst(currentDraggedLetter.name);
+            SetLetterInDirection(direction, distanceMultiplier);
+            drawLineSizeRect.x = 80;
         }
 
         Debug.Log($"distanceMultiplier: {distanceMultiplier} | {directionChangeMultiplier}");
@@ -206,7 +209,7 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
         {
             drawLineSizeRect.x += (_cellSize.y + _cellsGapInY) * directionChangeMultiplier * distanceMultiplier;
         }
-        else
+        else if (direction == 4)
         {
             drawLineSizeRect.x += (_cellSize.y + _cellsGapInY) * directionChangeMultiplier * distanceMultiplier;
         }
@@ -235,6 +238,8 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
 
     private void SetLetterInDirection(int direction, int distance)
     {
+        Debug.Log("SetLetterInDirection: " + direction + " | " + distance);
+
         // Reset colors of previous selections if not matched
         foreach (GameObject letter in _selectedLetters)
         {
@@ -267,6 +272,8 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
             // Attempt to find the GameObject in the grid; fallback to "_MATCHED" if not found
             GameObject go = transform.Find($"BoardLetter_{currentRow}_{currentCol}")?.gameObject
                             ?? transform.Find($"BoardLetter_{currentRow}_{currentCol}_MATCHED")?.gameObject;
+
+            Debug.Log("GO:: " + go);
 
             if (go != null)
             {
@@ -404,6 +411,11 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
             return;
         }
         _firstLetterName = rayCastedObject.name;
+
+        if(!_firstLetterName.Contains("BoardLetter"))
+        {
+            return;
+        }
 
         rayCastedObject.GetComponent<Text>().color = _selectedColor;
 

@@ -30,7 +30,7 @@ public class GameData : MonoBehaviour
         get
         {
 #if UNITY_EDITOR
-            return 1;
+            return 11;
 #else
             return PlayerPrefs.GetInt("UnlockedLevel", 1);
 #endif
@@ -111,11 +111,11 @@ public class GameData : MonoBehaviour
     // Determines the board size based on level; returns default size if level is 20+
     public Vector2Int GetLevelBoardMatrixSize(int level)
     {
-        if (level < 5)
+        if (level <= 10)
         {
             return new Vector2Int(5, 4);
         }
-        else if (level < 20)
+        else if (level <= 25)
         {
             return new Vector2Int(8, 6);
         }
