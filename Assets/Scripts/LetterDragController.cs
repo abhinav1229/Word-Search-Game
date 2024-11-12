@@ -51,7 +51,7 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
 
         Vector2 drawLineSizeRect = _drawLineRect.sizeDelta;
         int direction = GetDirection(_lastDraggedLetter.name, currentDraggedLetter.name);
-
+        Debug.Log("direction: " + direction);
         if (direction == -1)
         {
             return;
@@ -61,7 +61,8 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
 
         if (IsTakenNonLinearWildMove(currentDraggedLetter.name))
         {
-            // Debug.Log("Dragging IsTakenNonLinearWildMove");
+
+        Debug.Log("Dragging IsTakenNonLinearWildMove " + direction);
             return;
         }
 
@@ -88,7 +89,7 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
                         _drawLine.transform.eulerAngles = new Vector3(0, 0, 0);
                         dragLineAnchors.y += _lastDirection == 3 ? -40 : 40;
                         dragLineAnchors.x += 40;
-                        drawLineSizeRect.x -= (_cellSize.y + _cellsGapInY) * (_selectedLetters.Count - 1);
+                        drawLineSizeRect.x -= (_cellSize.y + 0) * (_selectedLetters.Count - 1);
                     }
                     else if (_lastDirection == 2)
                     {
@@ -109,7 +110,7 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
                         _drawLine.transform.eulerAngles = new Vector3(0, 0, 180);
                         dragLineAnchors.y += _lastDirection == 3 ? -40 : 40;
                         dragLineAnchors.x -= 40;
-                        drawLineSizeRect.x -= (_cellSize.y + _cellsGapInY) * (_selectedLetters.Count - 1);
+                        drawLineSizeRect.x -= (_cellSize.y + 0) * (_selectedLetters.Count - 1);
                     }
                     else if (_lastDirection == 1)
                     {
@@ -133,7 +134,7 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
                     }
                     else if (_lastDirection == 4)
                     {
-                        drawLineSizeRect.x -= (_cellSize.y + _cellsGapInY) * (_selectedLetters.Count - 1);
+                        drawLineSizeRect.x -= (_cellSize.y + 0) * (_selectedLetters.Count - 1);
                     }
                     SetLetterInDirection(direction, distanceMultiplier);
 
@@ -152,7 +153,7 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
                     }
                     else if (_lastDirection == 3)
                     {
-                        drawLineSizeRect.x -= (_cellSize.y + _cellsGapInY) * (_selectedLetters.Count - 1);
+                        drawLineSizeRect.x -= (_cellSize.y + 0) * (_selectedLetters.Count - 1);
                     }
                     SetLetterInDirection(direction, distanceMultiplier);
                 }
@@ -207,11 +208,11 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
         }
         else if (direction == 3)
         {
-            drawLineSizeRect.x += (_cellSize.y + _cellsGapInY) * directionChangeMultiplier * distanceMultiplier;
+            drawLineSizeRect.x += (_cellSize.y + 0) * directionChangeMultiplier * distanceMultiplier;
         }
         else if (direction == 4)
         {
-            drawLineSizeRect.x += (_cellSize.y + _cellsGapInY) * directionChangeMultiplier * distanceMultiplier;
+            drawLineSizeRect.x += (_cellSize.y + 0) * directionChangeMultiplier * distanceMultiplier;
         }
 
         if (directionChangeMultiplier == 1)
@@ -234,6 +235,55 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
         Debug.Log($"drawLineSizeRect: {drawLineSizeRect}");
         _drawLineRect.sizeDelta = drawLineSizeRect;
         _lastDraggedLetter = currentDraggedLetter;
+    }
+    public int GetDirection(string last, string current)
+    {
+        int last_row = int.Parse(last.Split('_')[1]);
+        int last_col = int.Parse(last.Split('_')[2]);
+
+        int curr_row = int.Parse(current.Split('_')[1]);
+        int curr_col = int.Parse(current.Split('_')[2]);
+
+        int first_row = int.Parse(_firstLetterName.Split('_')[1]);
+        int first_col = int.Parse(_firstLetterName.Split('_')[2]);
+
+
+        // Debug.Log($"Last: ({last_row}, {last_col}) | Current: ({curr_row}, {curr_col}) ");
+
+        // Horizontal movement
+        if (curr_row == last_row)
+        {
+            if (curr_col > last_col) return 1; // Right
+            if (curr_col < last_col) return 2; // Left
+        }
+
+        // Vertical movement
+        else if (curr_col == last_col)
+        {
+            if (curr_row > last_row) return 3; // Down
+            if (curr_row < last_row) return 4; // Up
+        }
+
+        else if (curr_col == first_col)
+        {
+            if (curr_row > first_row) return 3; // Down
+            if (curr_row < first_row) return 4; // Up
+        }
+
+        else if (curr_row == first_row)
+        {
+            if (curr_col > first_col) return 1; // Right
+            if (curr_col < first_col) return 2; // Left
+        }
+
+        // Diagonal movement
+        if (curr_row + 1 == last_row && curr_col + 1 == last_col) return 5;
+        // if (curr_row > last_row && curr_col > last_col) return 5; // Down-Right
+        // if (curr_row > last_row && curr_col < last_col) return 6; // Down-Left
+        // if (curr_row < last_row && curr_col > last_col) return 7; // Up-Right
+        // if (curr_row < last_row && curr_col < last_col) return 8; // Up-Left
+
+        return -1; // No direction matched
     }
 
     private void SetLetterInDirection(int direction, int distance)
@@ -412,7 +462,7 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
         }
         _firstLetterName = rayCastedObject.name;
 
-        if(!_firstLetterName.Contains("BoardLetter"))
+        if (!_firstLetterName.Contains("BoardLetter"))
         {
             return;
         }
@@ -467,80 +517,32 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
         _selectedLetters.Clear();
     }
 
-    public int GetDirection(string last, string current)
-    {
-        int last_row = int.Parse(last.Split('_')[1]);
-        int last_col = int.Parse(last.Split('_')[2]);
 
-        int curr_row = int.Parse(current.Split('_')[1]);
-        int curr_col = int.Parse(current.Split('_')[2]);
-
-        int first_row = int.Parse(_firstLetterName.Split('_')[1]);
-        int first_col = int.Parse(_firstLetterName.Split('_')[2]);
-
-
-        // Debug.Log($"Last: ({last_row}, {last_col}) | Current: ({curr_row}, {curr_col}) ");
-
-        // Horizontal movement
-        if (curr_row == last_row)
-        {
-            if (curr_col > last_col) return 1; // Right
-            if (curr_col < last_col) return 2; // Left
-        }
-
-        // Vertical movement
-        else if (curr_col == last_col)
-        {
-            if (curr_row > last_row) return 3; // Down
-            if (curr_row < last_row) return 4; // Up
-        }
-
-        else if (curr_col == first_col)
-        {
-            if (curr_row > first_row) return 3; // Down
-            if (curr_row < first_row) return 4; // Up
-        }
-
-        else if (curr_row == first_row)
-        {
-            if (curr_col > first_col) return 1; // Right
-            if (curr_col < first_col) return 2; // Left
-        }
-
-        // Diagonal movement
-        // if (curr_row > last_row && curr_col > last_col) return 5; // Down-Right
-        // if (curr_row > last_row && curr_col < last_col) return 6; // Down-Left
-        // if (curr_row < last_row && curr_col > last_col) return 7; // Up-Right
-        // if (curr_row < last_row && curr_col < last_col) return 8; // Up-Left
-
-        return -1; // No direction matched
-    }
 
     public static Color32 GetRandomColor()
     {
-        Color32[] lightColors = new Color32[]
-{
-    new Color32(180, 180, 180, 255), // Light Gray
-    new Color32(200, 200, 200, 255), // Soft Gray
-    new Color32(190, 180, 170, 255), // Light Taupe
-    new Color32(170, 190, 200, 255), // Light Slate Blue
-    new Color32(180, 200, 180, 255), // Soft Green
-    new Color32(160, 170, 190, 255), // Light Steel Blue
-    new Color32(200, 180, 160, 255), // Light Sand
-    new Color32(190, 170, 190, 255), // Soft Lavender
-    new Color32(200, 190, 160, 255), // Light Olive
-    new Color32(160, 190, 200, 255), // Soft Teal
-    new Color32(180, 160, 180, 255), // Soft Lilac
-    new Color32(200, 160, 160, 255), // Soft Rose
-    new Color32(190, 170, 160, 255), // Light Beige
-    new Color32(180, 160, 140, 255), // Light Tan
-    new Color32(170, 160, 200, 255)  // Soft Mauve
-};
+        Color32[] vibrantColors = new Color32[]
+        {
+        new Color32(220, 100, 100, 255), // Soft Coral
+        new Color32(200, 140, 90, 255),  // Warm Peach
+        new Color32(180, 130, 200, 255), // Soft Lavender Purple
+        new Color32(100, 180, 200, 255), // Light Teal
+        new Color32(140, 200, 100, 255), // Fresh Green
+        new Color32(200, 180, 90, 255),  // Goldenrod
+        new Color32(150, 100, 200, 255), // Lilac
+        new Color32(100, 200, 160, 255), // Aqua Mint
+        new Color32(200, 150, 130, 255), // Soft Sandstone
+        new Color32(200, 100, 160, 255), // Rose Pink
+        new Color32(160, 200, 90, 255),  // Apple Green
+        new Color32(200, 120, 150, 255), // Blush Pink
+        new Color32(90, 160, 200, 255),  // Sky Blue
+        new Color32(200, 90, 130, 255),  // Soft Crimson
+        new Color32(120, 200, 140, 255)  // Fresh Mint
+        };
 
-
-
-        int index = UnityEngine.Random.Range(0, lightColors.Length);
-        return lightColors[index];
+        int index = UnityEngine.Random.Range(0, vibrantColors.Length);
+        return vibrantColors[index];
     }
+
 
 }
