@@ -51,6 +51,7 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
 
         Vector2 drawLineSizeRect = _drawLineRect.sizeDelta;
         int direction = GetDirection(_lastDraggedLetter.name, currentDraggedLetter.name);
+        Debug.Log("--------------------");
         Debug.Log("direction: " + direction);
         if (direction == -1)
         {
@@ -97,9 +98,8 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
                     else if (_lastDirection == 5)
                     {
                         _drawLine.transform.eulerAngles = new Vector3(0, 0, 0f);
-                        dragLineAnchors.x += 65;
+                        dragLineAnchors.x += 70;
                         dragLineAnchors.y -= 20;
-
                         drawLineSizeRect.x -= 180 * (_selectedLetters.Count - 1);
                     }
 
@@ -122,8 +122,15 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
                     else if (_lastDirection == 1)
                     {
                         drawLineSizeRect.x -= (_cellSize.x + _cellsGapInX) * (_selectedLetters.Count - 1);
-
                     }
+                    else if (_lastDirection == 5)
+                    {
+                        _drawLine.transform.eulerAngles = new Vector3(0, 0, 0f);
+                        dragLineAnchors.x -= 15;
+                        dragLineAnchors.y -= 15;
+                        drawLineSizeRect.x -= 180 * (_selectedLetters.Count - 1);
+                    }
+
                     SetLetterInDirection(direction, distanceMultiplier);
 
                 }
@@ -143,6 +150,14 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
                     {
                         drawLineSizeRect.x -= (_cellSize.y + 0) * (_selectedLetters.Count - 1);
                     }
+                    else if (_lastDirection == 5)
+                    {
+                        _drawLine.transform.eulerAngles = new Vector3(0, 0, 90f);
+                        dragLineAnchors.x += 25;
+                        dragLineAnchors.y -= 55;
+                        drawLineSizeRect.x -= 180 * (_selectedLetters.Count - 1);
+                    }
+
                     SetLetterInDirection(direction, distanceMultiplier);
 
                 }
@@ -162,6 +177,14 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
                     {
                         drawLineSizeRect.x -= (_cellSize.y + 0) * (_selectedLetters.Count - 1);
                     }
+                    else if (_lastDirection == 5)
+                    {
+                        _drawLine.transform.eulerAngles = new Vector3(0, 0, 90f);
+                        dragLineAnchors.x += 25;
+                        dragLineAnchors.y += 25;
+                        drawLineSizeRect.x -= 180 * (_selectedLetters.Count - 1);
+                    }
+
                     SetLetterInDirection(direction, distanceMultiplier);
                 }
                 else if (direction == 5)
@@ -171,12 +194,20 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
                     dragLineAnchors.x -= 25;
                     dragLineAnchors.y += 15;
 
-                    if (_lastDirection == 1)
+                    if (_lastDirection == 1 || _lastDirection == 2)
                     {
-                        // dragLineAnchors.y += _lastDirection == 1 ? 30 : 40;
-                        dragLineAnchors.x += 40;
+                        dragLineAnchors.y += _lastDirection == 1 ? 5 : 0;
+                        dragLineAnchors.x += _lastDirection == 1 ? 35 : -40;
                         drawLineSizeRect.x -= (_cellSize.x + _cellsGapInX) * (_selectedLetters.Count - 1);
                     }
+                    if (_lastDirection == 3 || _lastDirection == 4)
+                    {
+                        dragLineAnchors.y += _lastDirection == 3 ? -40 : 40;
+                        dragLineAnchors.x += _lastDirection == 3 ? 0 : 0;
+                        drawLineSizeRect.x -= (_cellSize.y + 0) * (_selectedLetters.Count - 1);
+                    }
+
+                    SetLetterInDirection(direction, distanceMultiplier);
                 }
                 _drawLineRect.anchoredPosition = dragLineAnchors;
                 _lastDirection = direction;
@@ -256,7 +287,6 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
             }
         }
 
-        Debug.Log($"drawLineSizeRect: {drawLineSizeRect}");
         _drawLineRect.sizeDelta = drawLineSizeRect;
         _lastDraggedLetter = currentDraggedLetter;
     }
@@ -274,27 +304,27 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
 
         // Debug.Log($"Last: ({last_row}, {last_col}) | Current: ({curr_row}, {curr_col}) ");
 
-        // Horizontal movement
-        if (curr_row == last_row)
-        {
-            if (curr_col > last_col) return 1; // Right
-            if (curr_col < last_col) return 2; // Left
-        }
+        // // Horizontal movement
+        // if (curr_row == last_row)
+        // {
+        //     if (curr_col > last_col) return 1; // Right
+        //     if (curr_col < last_col) return 2; // Left
+        // }
 
-        // Vertical movement
-        else if (curr_col == last_col)
-        {
-            if (curr_row > last_row) return 3; // Down
-            if (curr_row < last_row) return 4; // Up
-        }
+        // // Vertical movement
+        // if (curr_col == last_col)
+        // {
+        //     if (curr_row > last_row) return 3; // Down
+        //     if (curr_row < last_row) return 4; // Up
+        // }
 
-        else if (curr_col == first_col)
+        if (curr_col == first_col)
         {
             if (curr_row > first_row) return 3; // Down
             if (curr_row < first_row) return 4; // Up
         }
 
-        else if (curr_row == first_row)
+        if (curr_row == first_row)
         {
             if (curr_col > first_col) return 1; // Right
             if (curr_col < first_col) return 2; // Left
@@ -318,7 +348,7 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
 
     private void SetLetterInDirection(int direction, int distance)
     {
-        Debug.Log("SetLetterInDirection: " + direction + " | " + distance);
+        // Debug.Log("SetLetterInDirection: " + direction + " | " + distance);
 
         // Reset colors of previous selections if not matched
         foreach (GameObject letter in _selectedLetters)
@@ -469,25 +499,36 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
 
     private bool HaveCrossedToTheStartLetter(string draggingObjectName, int direction)
     {
+        int draggingRow = int.Parse(draggingObjectName.Split('_')[1]);
+        int draggingCol = int.Parse(draggingObjectName.Split('_')[2]);
+        int firstRow = int.Parse(_firstLetterName.Split('_')[1]);
+        int firstCol = int.Parse(_firstLetterName.Split('_')[2]);
+
         if (direction == 1)
         {
-            return int.Parse(draggingObjectName.Split('_')[2]) > int.Parse(_firstLetterName.Split('_')[2]);
+            return draggingCol > firstCol; // Right
         }
         else if (direction == 2)
         {
-            return int.Parse(draggingObjectName.Split('_')[2]) < int.Parse(_firstLetterName.Split('_')[2]);
+            return draggingCol < firstCol; // Left
         }
         else if (direction == 3)
         {
-            return int.Parse(draggingObjectName.Split('_')[1]) > int.Parse(_firstLetterName.Split('_')[1]);
+            return draggingRow > firstRow; // Down
         }
         else if (direction == 4)
         {
-            return int.Parse(draggingObjectName.Split('_')[1]) < int.Parse(_firstLetterName.Split('_')[1]);
+            return draggingRow < firstRow; // Up
+        }
+        else if (direction == 5)
+        {
+            // Check if both row and column of draggingObjectName are greater than those of _firstLetterName
+            return draggingRow > firstRow && draggingCol > firstCol; // Down-right diagonal
         }
 
         return false;
     }
+
 
     public bool HaveReachedToTheStartLetter(string current, string last)
     {
