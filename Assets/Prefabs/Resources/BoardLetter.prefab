@@ -70,7 +70,7 @@ MonoBehaviour:
     m_FontSize: 82
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 8
     m_MaxSize: 98
     m_Alignment: 4
     m_AlignByGeometry: 0
