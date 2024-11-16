@@ -11,22 +11,22 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject _boardLetterContainer;
     [SerializeField] private Canvas _canvas;
 
-    [HideInInspector] public List<string> _currentLevelWords = new();  // Words for the current level
+    [HideInInspector] public List<string> CurrentLevelWords = new();  // Words for the current level
     private GameObject _boardLetterPrefab;
     private GameObject _wordObjectPrefab;
     private string _defaultBoardLetter = "A"; // Default text for board letters
 
-    public static GameManager instance;
+    public static GameManager Instance;
 
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
         }
         else
         {
-            Destroy(instance);
+            Destroy(Instance);
         }
     }
 
@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         // Initialize word list for the current gameplay level
-        
+
     }
 
     private void Start()
@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void StartGame()
-    {        
+    {
         StartCoroutine(UpdateListOfCurrentLevelWords());
     }
 
@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
     {
         yield return GameData.Instance.LoadLevelData(GameData.UnlockedLevel, words =>
         {
-            _currentLevelWords = words;
+            CurrentLevelWords = words;
             FillBoardWithDefaults();
         });
     }
@@ -73,15 +73,15 @@ public class GameManager : MonoBehaviour
     {
         DestroyAllChildren(_wordsContainer);
 
-        Debug.Log($"Level {GameData.UnlockedLevel} has {_currentLevelWords.Count} words to add to the container.");
+        Debug.Log($"Level {GameData.UnlockedLevel} has {CurrentLevelWords.Count} words to add to the container.");
 
-        foreach (string wordText in _currentLevelWords)
+        foreach (string wordText in CurrentLevelWords)
         {
             GameObject wordObject = InstantiateWithParent(_wordObjectPrefab, _wordsContainer, false, ObjectNaming.Incremental);
             wordObject.GetComponent<Text>().text = wordText;
         }
 
-        PlaceWordsInGrid();
+        UpdateGridUI();
     }
 
     private List<GameObject> letterObjects = new List<GameObject>();
@@ -120,8 +120,7 @@ public class GameManager : MonoBehaviour
                 grid[i, j] = '\0';
             }
         }
-
-        PopulateWordsContainer();
+        PlaceWordsInGrid();
     }
 
     void UpdateGridUI()
@@ -169,7 +168,12 @@ public class GameManager : MonoBehaviour
             .OrderBy(_ => System.Guid.NewGuid()) // Randomize the order
             .ToList(); // Convert back to a list
 
-        foreach (string word in _currentLevelWords)
+        List<string> lstOfNonPlacedWords = new List<string>();
+        CurrentLevelWords = CurrentLevelWords
+                    .OrderBy(_ => System.Guid.NewGuid()) // Randomize the order
+                    .ToList();
+
+        foreach (string word in CurrentLevelWords)
         {
             bool placed = false;
 
@@ -200,11 +204,18 @@ public class GameManager : MonoBehaviour
             // If not placed, log a warning
             if (!placed)
             {
-                Debug.LogWarning($"Could not place word: {word}. Grid may be too small or crowded.");
+                Debug.LogError($"Could not place word: {word}. Grid may be too small or crowded.");
+                lstOfNonPlacedWords.Add(word);
+
             }
         }
 
-        UpdateGridUI();
+        foreach (string word in lstOfNonPlacedWords)
+        {
+            CurrentLevelWords.Remove(word);
+        }
+
+        PopulateWordsContainer();
     }
 
 
@@ -306,12 +317,28 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if(_countMarksWords == _currentLevelWords.Count)
+        if (_countMarksWords == CurrentLevelWords.Count)
         {
-            GameObject levelComplete = Resources.Load<GameObject>("LevelCompletePopup");
-            Instantiate(levelComplete, _canvas.transform);
-            _countMarksWords = 0;
+            Invoke(nameof(ShowLevelCompletePopup), 0.8f);
         }
+    }
+
+    private void ShowLevelCompletePopup()
+    {
+        GameObject levelComplete = Resources.Load<GameObject>("LevelCompletePopup");
+        Instantiate(levelComplete, _canvas.transform);
+        _countMarksWords = 0;
+
+        GameUIManager.Instance.StopCoroutine(GameUIManager.Instance._timerCoroutine);
+    }
+
+    public void ShowGameOverPopup()
+    {
+        CancelInvoke(nameof(ShowLevelCompletePopup));
+
+        GameObject levelComplete = Resources.Load<GameObject>("GameOverPopup");
+        Instantiate(levelComplete, _canvas.transform);
+        _countMarksWords = 0;
     }
 
     public bool IsMarkedTheWord(string matchedWord)

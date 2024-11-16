@@ -38,9 +38,14 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IPointerDownHan
     private void Start()
     {
         _drawLineRect = _drawLine.GetComponent<RectTransform>();
+        SetCellSize();
+    }
+
+    public void SetCellSize()
+    {
         _cellSize = GameData.Instance.GetLevelBoardCellSize(GameData.UnlockedLevel);
 
-        if (GameData.UnlockedLevel > 20)
+        if (GameData.UnlockedLevel > 10)
         {
             _cellsGapInY = 0;
         }
@@ -862,10 +867,10 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IPointerDownHan
         }
 
         Debug.Log(selectedWord);
-        string matchedWord = GameManager.instance._currentLevelWords.Find((word) => word.Equals(selectedWord));
-        if (matchedWord != null && !GameManager.instance.IsMarkedTheWord(matchedWord))
+        string matchedWord = GameManager.Instance.CurrentLevelWords.Find((word) => word.Equals(selectedWord));
+        if (matchedWord != null && !GameManager.Instance.IsMarkedTheWord(matchedWord))
         {
-            GameManager.instance.MarkWordAsFound(matchedWord);
+            GameManager.Instance.MarkWordAsFound(matchedWord);
             GameObject drawLineForMatchedWord = Instantiate(_drawLine, _matchedDrawLine.transform);
             drawLineForMatchedWord.GetComponent<Canvas>().sortingOrder = 1;
 

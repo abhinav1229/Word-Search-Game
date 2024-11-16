@@ -30,7 +30,7 @@ public class GameData : MonoBehaviour
         get
         {
 #if UNITY_EDITOR
-            return 31;
+            
             return PlayerPrefs.GetInt("UnlockedLevel", 1);
 #else
             return PlayerPrefs.GetInt("UnlockedLevel", 1);
