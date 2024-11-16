@@ -1844,6 +1844,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _wordsContainer: {fileID: 241666000}
   _boardLetterContainer: {fileID: 989019059}
+  _canvas: {fileID: 1510464787}
   _currentLevelWords: []
 --- !u!1 &2055416594
 GameObject:

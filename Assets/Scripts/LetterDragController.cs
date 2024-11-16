@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandler, IPointerDownHandler, IPointerUpHandler
+public class LetterDragController : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler
 {
     [Header("--- GameObjects ---")]
     [SerializeField] private GameObject _drawLine;
@@ -25,6 +25,16 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
 
     private List<GameObject> _selectedLetters = new();
 
+    public static LetterDragController Instance;
+
+    public void Awake()
+    {
+        if(Instance == null)
+        {
+            Instance = this;
+        }
+    }
+
     private void Start()
     {
         _drawLineRect = _drawLine.GetComponent<RectTransform>();
@@ -34,11 +44,14 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
         {
             _cellsGapInY = 0;
         }
-
     }
-    public void OnBeginDrag(PointerEventData eventData)
+    
+    public void ClearAllDrawLines()
     {
-
+        foreach(Transform drawLine in _matchedDrawLine.transform)
+        {
+            Destroy(drawLine.gameObject);
+        }
     }
 
     private float GetDiagonalLength()

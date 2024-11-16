@@ -30,7 +30,8 @@ public class GameData : MonoBehaviour
         get
         {
 #if UNITY_EDITOR
-            return 34;
+            return 31;
+            return PlayerPrefs.GetInt("UnlockedLevel", 1);
 #else
             return PlayerPrefs.GetInt("UnlockedLevel", 1);
 #endif
@@ -124,11 +125,11 @@ public class GameData : MonoBehaviour
 
     public Vector2Int GetLevelBoardCellSize(int level)
     {
-        if (level < 5)
+        if (level <= 10)
         {
             return new Vector2Int(210, 180);
         }
-        else if (level < 20)
+        else if (level <= 25)
         {
             return new Vector2Int(135, 110);
         }
