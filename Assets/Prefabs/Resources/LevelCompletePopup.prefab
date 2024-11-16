@@ -497,6 +497,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a259f1b6b737f844ca1ee1d83e89726e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _starCountText: {fileID: 7401360305189622446}
+  _bonusCountText: {fileID: 295594797304079148}
 --- !u!114 &1727615650698334776
 MonoBehaviour:
   m_ObjectHideFlags: 0
