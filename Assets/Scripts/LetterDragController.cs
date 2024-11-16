@@ -41,22 +41,86 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
 
     }
 
-    private float GetDigonalLength()
+    private float GetDiagonalLength()
     {
-        if(GameData.UnlockedLevel <= 10)
+        if (GameData.UnlockedLevel <= 10)
         {
             return 285f;
         }
-        else if(GameData.UnlockedLevel <= 25)
+        else if (GameData.UnlockedLevel <= 25)
         {
             return 180f;
         }
-        else if(GameData.UnlockedLevel <= 50)
+        else if (GameData.UnlockedLevel <= 50)
         {
             return 150f;
         }
 
         return 180f;
+    }
+
+    private float GetDiagonalAngle(int direction)
+    {
+        float angle = 0;
+        if (GameData.UnlockedLevel <= 10)
+        {
+            if (direction == 5)
+            {
+                angle = -39f;
+            }
+            else if (direction == 6)
+            {
+                angle = -141.5f;
+            }
+            else if (direction == 7)
+            {
+                angle = 39.5f;
+            }
+            else if (direction == 8)
+            {
+                angle = -219.5f;
+            }
+        }
+        else if (GameData.UnlockedLevel <= 25)
+        {
+            if (direction == 5)
+            {
+                angle = -37f;
+            }
+            else if (direction == 6)
+            {
+                angle = -143f;
+            }
+            else if (direction == 7)
+            {
+                angle = 37f;
+            }
+            else if (direction == 8)
+            {
+                angle = 142f;
+            }
+        }
+        else if (GameData.UnlockedLevel <= 50)
+        {
+            if (direction == 5)
+            {
+                angle = -41.5f;
+            }
+            else if (direction == 6)
+            {
+                angle = 221.5f;
+            }
+            else if (direction == 7)
+            {
+                angle = 41.5f;
+            }
+            else if (direction == 8)
+            {
+                angle = 138f;
+            }
+        }
+
+        return angle;
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -86,7 +150,7 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
 
         int distanceMultiplier = 1;
 
-        float diagonalLength = GetDigonalLength();
+        float diagonalLength = GetDiagonalLength();
 
         Debug.Log($"Passed: ({_lastDirection},{direction}) | {HaveCrossedToTheStartLetter(currentDraggedLetter.name, direction)}");
 
@@ -292,7 +356,7 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
                 }
                 else if (direction == 5)
                 {
-                    _drawLine.transform.eulerAngles = new Vector3(0, 0, -37f);
+                    _drawLine.transform.eulerAngles = new Vector3(0, 0, GetDiagonalAngle(direction));
                     _drawLine.GetComponent<RectTransform>().pivot = new Vector2(0, 0.5f);
                     dragLineAnchors.x -= 25;
                     dragLineAnchors.y += 15;
@@ -314,7 +378,7 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
                 }
                 else if (direction == 6)
                 {
-                    _drawLine.transform.eulerAngles = new Vector3(0, 0, -143f);
+                    _drawLine.transform.eulerAngles = new Vector3(0, 0, GetDiagonalAngle(direction));
                     _drawLine.GetComponent<RectTransform>().pivot = new Vector2(0, 0.5f);
                     dragLineAnchors.x += 37;
                     dragLineAnchors.y += 20;
@@ -333,7 +397,7 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
                 }
                 else if (direction == 7)
                 {
-                    _drawLine.transform.eulerAngles = new Vector3(0, 0, 37f);
+                    _drawLine.transform.eulerAngles = new Vector3(0, 0, GetDiagonalAngle(direction));
                     _drawLine.GetComponent<RectTransform>().pivot = new Vector2(0, 0.5f);
                     dragLineAnchors.x -= 30;
                     dragLineAnchors.y -= 25;
@@ -353,7 +417,7 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
                 }
                 else if (direction == 8)
                 {
-                    _drawLine.transform.eulerAngles = new Vector3(0, 0, 142f);
+                    _drawLine.transform.eulerAngles = new Vector3(0, 0, GetDiagonalAngle(direction));
                     _drawLine.GetComponent<RectTransform>().pivot = new Vector2(0, 0.5f);
                     dragLineAnchors.x += 30;
                     dragLineAnchors.y -= 30;
@@ -459,6 +523,11 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
                     _lastDraggedLetter.GetComponent<Text>().color = _defaultColor;
                 }
             }
+        }
+
+        if(GameData.UnlockedLevel <= 10)
+        {
+            drawLineSizeRect.y = 90;
         }
 
         _drawLineRect.sizeDelta = drawLineSizeRect;
@@ -754,6 +823,10 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IBeginDragHandl
 
         Vector3 letterAnchors = rayCastedObject.GetComponent<RectTransform>().anchoredPosition3D;
         _drawLineRect.sizeDelta = _drawLineDefaultSize;
+        if (GameData.UnlockedLevel <= 10)
+        {
+            _drawLineRect.sizeDelta = new Vector3(90, 90, 0);
+        }
         _drawLineRect.anchoredPosition = letterAnchors;
         _drawLine.GetComponent<Image>().color = GetRandomColor();
 
