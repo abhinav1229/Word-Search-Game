@@ -355,6 +355,149 @@ public class GameManager : MonoBehaviour
 
         return isActive;
     }
+    public void OnHintButtonClick(GameObject hintButton)
+    {
+        foreach (Transform word in _wordsContainer.transform)
+        {
+            // Find the first word that hasn't been completed
+            if (!word.GetChild(0).gameObject.activeInHierarchy)
+            {
+                string targetWord = word.GetComponent<Text>().text;
+                Debug.Log("Hint for word: " + targetWord);
+
+                // Find the starting position and direction of the word in the grid
+                (Vector2Int startPosition, Vector2Int direction) = FindWordStartAndDirection(targetWord);
+
+                if (startPosition.x != -1 && startPosition.y != -1)
+                {
+                    Debug.Log($"Word {targetWord} starts at: {startPosition} in direction {direction}");
+
+                    // Highlight the first two letters in the UI
+                    HighlightLetters(startPosition, direction, 2);
+                }
+                else
+                {
+                    Debug.Log($"Word {targetWord} not found in the grid!");
+                }
+
+                break; // Stop after finding the first incomplete word
+            }
+        }
+    }
+
+    /// <summary>
+    /// Finds the starting position and direction of a word in the grid.
+    /// </summary>
+    private (Vector2Int, Vector2Int) FindWordStartAndDirection(string targetWord)
+    {
+        Vector2Int boardSize = GameData.Instance.GetLevelBoardMatrixSize(GameData.UnlockedLevel);
+
+        // Define all 8 possible directions
+        Vector2Int[] directions = {
+        Vector2Int.right,                // Left to right
+        Vector2Int.left,                 // Right to left
+        Vector2Int.down,                 // Top to bottom
+        Vector2Int.up,                   // Bottom to top
+        new Vector2Int(1, 1),            // Top-left to bottom-right
+        new Vector2Int(-1, -1),          // Bottom-right to top-left
+        new Vector2Int(-1, 1),           // Top-right to bottom-left
+        new Vector2Int(1, -1)            // Bottom-left to top-right
+    };
+
+        for (int i = 0; i < boardSize.x; i++)
+        {
+            for (int j = 0; j < boardSize.y; j++)
+            {
+                // Check if the grid matches the first letter of the word
+                if (char.ToLower(grid[i, j]) == char.ToLower(targetWord[0]))
+                {
+                    Debug.Log($"First letter match at {i},{j}");
+
+                    // Check all possible directions for the word
+                    foreach (var direction in directions)
+                    {
+                        if (DoesWordFitInDirection(i, j, targetWord, direction))
+                        {
+                            Debug.Log($"Word {targetWord} fits starting at {i},{j} in direction {direction}");
+                            return (new Vector2Int(i, j), direction);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Return an invalid position if not found
+        return (new Vector2Int(-1, -1), Vector2Int.zero);
+    }
+
+    /// <summary>
+    /// Checks if a word fits starting from a position in a specific direction.
+    /// </summary>
+    private bool DoesWordFitInDirection(int startX, int startY, string word, Vector2Int direction)
+    {
+        int wordLength = word.Length;
+        Vector2Int boardSize = GameData.Instance.GetLevelBoardMatrixSize(GameData.UnlockedLevel);
+
+        for (int k = 0; k < wordLength; k++)
+        {
+            int x = startX + k * direction.x;
+            int y = startY + k * direction.y;
+
+            // Check boundaries
+            if (x < 0 || x >= boardSize.x || y < 0 || y >= boardSize.y)
+                return false;
+
+            // Check if grid letter matches the word letter (case insensitive)
+            if (char.ToLower(grid[x, y]) != char.ToLower(word[k]))
+                return false;
+        }
+
+        return true;
+    }
+
+
+
+    /// <summary>
+    /// Highlights the specified number of letters starting from a position in a direction.
+    /// </summary>
+    private void HighlightLetters(Vector2Int startPosition, Vector2Int direction, int count)
+    {
+        Vector2Int boardSize = GameData.Instance.GetLevelBoardMatrixSize(GameData.UnlockedLevel);
+
+        for (int i = 0; i < count; i++)
+        {
+            Vector2Int currentPosition = startPosition + i * direction;
+
+            // Check boundaries
+            if (currentPosition.x < 0 || currentPosition.x >= boardSize.x || currentPosition.y < 0 || currentPosition.y >= boardSize.y)
+            {
+                Debug.LogWarning($"Position {currentPosition} is out of bounds, stopping highlight.");
+                break;
+            }
+
+            int k = currentPosition.x * boardSize.y + currentPosition.y;
+
+            // Assuming letterObjects contains the UI elements corresponding to the grid
+            if (k >= 0 && k < letterObjects.Count)
+            {
+                Text letterText = letterObjects[k].GetComponentInChildren<Text>();
+                if (letterText != null)
+                {
+                    letterText.color = Color.red; // Highlight with red
+                }
+                else
+                {
+                    Debug.LogWarning($"Text component not found for letter object at index {k}");
+                }
+            }
+            else
+            {
+                Debug.LogError($"Invalid index {k} for letterObjects array.");
+            }
+        }
+    }
+
+
 
 
     // Instantiates an object, sets its parent, and applies additional options
