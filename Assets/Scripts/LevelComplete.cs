@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,32 +10,41 @@ public class LevelComplete : MonoBehaviour
     [SerializeField] private Text _starCountText;
     [SerializeField] private Text _bonusCountText;
 
-    private void OnEnable() 
+    private void OnEnable()
     {
+
+        transform.Find("BackgroundImage").GetComponent<RectTransform>().DOAnchorPos3D(Vector3.zero, 0.2f).SetEase(Ease.Flash);
+
         int bonusCount = GameManager.Instance.CurrentLevelWords.Count * 5;
 
         GameData.Instance.UpdateStarsCount(bonusCount, true);
         _starCountText.text = GameData.StarsCount.ToString();
         _bonusCountText.text = "+" + bonusCount;
+
+        GameData.Instance.UnlockNewLevel();
     }
 
     public void OnHomeButtonClick(GameObject homeButton)
     {
         GameManager.Instance.DestroyThisWindow();
         HomeScreen.Instance.gameObject.SetActive(true);
-        Destroy(gameObject, 0.1f);
+        transform.Find("BackgroundImage").GetComponent<RectTransform>().DOAnchorPos3D(new Vector3(1100, 0, 0), 0.2f).SetEase(Ease.Flash).OnComplete(() =>
+        {
+            Destroy(gameObject);
+        });
     }
 
     public void OnNextButtonClick(GameObject nextButton)
     {
-        GameData.Instance.UnlockNewLevel();
-
         LetterDragController.Instance.ClearAllDrawLines();
         LetterDragController.Instance.SetCellSize();
 
         GameUIManager.Instance.SetUI();
 
         GameManager.Instance.StartGame();
-        Destroy(gameObject, 0.1f);
+        transform.Find("BackgroundImage").GetComponent<RectTransform>().DOAnchorPos3D(new Vector3(1100, 0, 0), 0.2f).SetEase(Ease.Flash).OnComplete(() =>
+        {
+            Destroy(gameObject);
+        });
     }
 }

@@ -30,6 +30,13 @@ public class GameUIManager : MonoBehaviour
     {
         GameObject gameOver = Resources.Load<GameObject>("SettingPopup");
         Instantiate(gameOver, GameData.Instance.MainCanvas.transform);
+
+        _isPaused = true;
+    }
+
+    public void ResumeCouroutine()
+    {
+        _isPaused = false;
     }
 
     public void SetUI()
@@ -40,7 +47,7 @@ public class GameUIManager : MonoBehaviour
         SetCurrentLevel();
         SetStarsCounts();
 
-        if(_timerCoroutine != null)
+        if (_timerCoroutine != null)
         {
             StopCoroutine(_timerCoroutine);
         }
@@ -60,12 +67,16 @@ public class GameUIManager : MonoBehaviour
 
 
     private float _timeRemaining = 160f; // Timer starts from 160 seconds
-    private bool _isRunning = true;
+    private bool _isRunning = true, _isPaused = false;
     public IEnumerator StartTimer()
     {
         while (_timeRemaining > 0 && _isRunning)
         {
-            _timeRemaining -= Time.deltaTime; // Decrease time by deltaTime
+            if (!_isPaused)
+            {
+                _timeRemaining -= Time.deltaTime; // Decrease time by deltaTime
+            }
+
             int seconds = Mathf.CeilToInt(_timeRemaining); // Convert to integer
             _timerText.text = $"{seconds}s"; // Update the UI text
             yield return null; // Wait for the next frame
