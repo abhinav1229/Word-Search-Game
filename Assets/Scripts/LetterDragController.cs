@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -9,6 +10,7 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IPointerDownHan
     [Header("--- GameObjects ---")]
     [SerializeField] private GameObject _drawLine;
     [SerializeField] private GameObject _matchedDrawLine;
+    [SerializeField] private GameObject _selecedWordHint;
 
 
     private GameObject _lastDraggedLetter;
@@ -29,7 +31,7 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IPointerDownHan
 
     public void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
             Instance = this;
         }
@@ -50,10 +52,10 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IPointerDownHan
             _cellsGapInY = 0;
         }
     }
-    
+
     public void ClearAllDrawLines()
     {
-        foreach(Transform drawLine in _matchedDrawLine.transform)
+        foreach (Transform drawLine in _matchedDrawLine.transform)
         {
             Destroy(drawLine.gameObject);
         }
@@ -543,13 +545,15 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IPointerDownHan
             }
         }
 
-        if(GameData.UnlockedLevel <= 10)
+        if (GameData.UnlockedLevel <= 10)
         {
             drawLineSizeRect.y = 90;
         }
 
         _drawLineRect.sizeDelta = drawLineSizeRect;
         _lastDraggedLetter = currentDraggedLetter;
+
+        SetHint(drawLineColor);
     }
 
     public int GetDirection(string last, string current)
@@ -846,11 +850,38 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IPointerDownHan
             _drawLineRect.sizeDelta = new Vector3(90, 90, 0);
         }
         _drawLineRect.anchoredPosition = letterAnchors;
-        _drawLine.GetComponent<Image>().color = GetRandomColor();
+        drawLineColor = GetRandomColor();
+        _drawLine.GetComponent<Image>().color = drawLineColor;
 
         _lastDraggedLetter = rayCastedObject;
 
         _selectedLetters.Add(rayCastedObject);
+
+        SetHint(drawLineColor);
+    }
+
+    Color drawLineColor = Color.white;
+    private void SetHint(Color color)
+    {
+        string selectedWord = String.Empty;
+        foreach (var item in _selectedLetters)
+        {
+            selectedWord += item.GetComponent<Text>().text;
+        }
+
+        int lengthIncremental = 80;
+        if (selectedWord.Length > 1)
+        {
+            lengthIncremental = 80 + 30 * selectedWord.Count();
+        }
+        else if (selectedWord.Length < 1)
+        {
+            lengthIncremental = 0;
+        }
+
+        _selecedWordHint.GetComponent<Image>().color = color;
+        _selecedWordHint.GetComponent<RectTransform>().sizeDelta = new Vector3(lengthIncremental, 80, 0);
+        _selecedWordHint.transform.GetChild(0).GetComponent<Text>().text = selectedWord;
     }
 
 
@@ -889,6 +920,7 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IPointerDownHan
         _drawLine.transform.eulerAngles = new Vector3(0, 0, 0);
 
         _selectedLetters.Clear();
+        SetHint(Color.black);
     }
 
 
