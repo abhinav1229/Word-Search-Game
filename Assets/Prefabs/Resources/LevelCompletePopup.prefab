@@ -499,6 +499,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _starCountText: {fileID: 7401360305189622446}
   _bonusCountText: {fileID: 295594797304079148}
+  _levelCompleteClip: {fileID: 8300000, guid: 7de7fbe490dab8144b8ac32baebc3e5c, type: 3}
 --- !u!114 &1727615650698334776
 MonoBehaviour:
   m_ObjectHideFlags: 0

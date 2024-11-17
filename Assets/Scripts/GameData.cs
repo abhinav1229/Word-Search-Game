@@ -10,7 +10,7 @@ public class GameData : MonoBehaviour
 
     private LevelDataList _cachedLevelDataList; // Cached level data to avoid repeated file reads
 
-    public Canvas MainCanvas;
+    public GameObject MainScreen;
 
     private void Awake()
     {
@@ -32,13 +32,14 @@ public class GameData : MonoBehaviour
         get
         {
 #if UNITY_EDITOR
-            
+
             return PlayerPrefs.GetInt("UnlockedLevel", 1);
 #else
             return PlayerPrefs.GetInt("UnlockedLevel", 1);
 #endif
         }
     }
+
 
     // Property to get the current star count from PlayerPrefs
     public static int StarsCount
@@ -136,6 +137,26 @@ public class GameData : MonoBehaviour
             return new Vector2Int(135, 110);
         }
         return new Vector2Int(100, 100);
+    }
+
+    public static int IsSoundEnabled
+    {
+        get
+        {
+            return PlayerPrefs.GetInt("SoundStatus", 1);
+        }
+    }
+
+    public void SetSoundStatus()
+    {
+        if(IsSoundEnabled == 1)
+        {
+            PlayerPrefs.SetInt("SoundStatus", 0);
+        }
+        else 
+        {
+            PlayerPrefs.SetInt("SoundStatus", 1);
+        }
     }
 }
 

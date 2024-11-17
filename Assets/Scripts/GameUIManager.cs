@@ -28,8 +28,9 @@ public class GameUIManager : MonoBehaviour
 
     public void OnHomeButtonClick(GameObject homeButton)
     {
+        AudioManager.Instance.PlayButtonClickSound();
         GameObject gameOver = Resources.Load<GameObject>("SettingPopup");
-        Instantiate(gameOver, GameData.Instance.MainCanvas.transform);
+        Instantiate(gameOver, GameData.Instance.MainScreen.transform);
 
         _isPaused = true;
     }

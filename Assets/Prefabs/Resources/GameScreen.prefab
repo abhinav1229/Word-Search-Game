@@ -1111,7 +1111,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -370}
-  m_SizeDelta: {x: -60, y: 300}
+  m_SizeDelta: {x: -130, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6174122985125879160
 CanvasRenderer:
@@ -1134,14 +1134,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.959758, g: 1, b: 0.8207547, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1140788435, guid: 12a4e81bdf179fe498c4cea81d701fea, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1f4d8fb5d0fc269458354ab4060726cd, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1923,6 +1923,9 @@ MonoBehaviour:
   _drawLine: {fileID: 4838429996213665561}
   _matchedDrawLine: {fileID: 3767202613646650880}
   _selecedWordHint: {fileID: 2712301814054848554}
+  _selectedWordClip: {fileID: 8300000, guid: 1adb9ef92e114894d80a314faac88431, type: 3}
+  _wrongMatchClip: {fileID: 8300000, guid: 70e8685cc18c6a04080ab9d176e59983, type: 3}
+  _completedWordClip: {fileID: 8300000, guid: f58b6a6e016bb3244b28b5b0e42df107, type: 3}
 --- !u!114 &7298403499719847507
 MonoBehaviour:
   m_ObjectHideFlags: 0

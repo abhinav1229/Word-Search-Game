@@ -27,19 +27,23 @@ public class HomeScreen : MonoBehaviour
 
     public void OnPlayButtonClick(GameObject playButton)
     {
+        AudioManager.Instance.PlayButtonClickSound();
         GameObject gameScreen = Resources.Load<GameObject>("GameScreen");
-        Instantiate(gameScreen, GameData.Instance.MainCanvas.transform);
+        Instantiate(gameScreen, GameData.Instance.MainScreen.transform);
 
+        _resetWindow.DOAnchorPos(new Vector3(0, -700f, 0), 0.5f).SetEase(Ease.InFlash);
         gameObject.SetActive(false);
     }
 
     public void OnResetGameButtonClick(GameObject resetButton)
     {
+        AudioManager.Instance.PlayButtonClickSound();
         _resetWindow.DOAnchorPos(new Vector3(0, 300f, 0), 0.3f).SetEase(Ease.InFlash);
     }
 
     public void OnYesButtonClick(GameObject yesButton)
     {
+        AudioManager.Instance.PlayButtonClickSound();
         PlayerPrefs.DeleteAll();
         _levelText.text = "Level " + GameData.UnlockedLevel.ToString();
         _starCountText.text = GameData.StarsCount.ToString();
@@ -49,6 +53,7 @@ public class HomeScreen : MonoBehaviour
 
     public void OnNoButtonClick(GameObject noButton)
     {
+        AudioManager.Instance.PlayButtonClickSound();
         _resetWindow.DOAnchorPos(new Vector3(0, -700f, 0), 0.5f).SetEase(Ease.InFlash);
     }
 }

@@ -9,7 +9,6 @@ public class GameManager : MonoBehaviour
     [Header("--- GameObjects ---")]
     [SerializeField] private GameObject _wordsContainer;
     [SerializeField] private GameObject _boardLetterContainer;
-    private Canvas _canvas;
 
     [HideInInspector] public List<string> CurrentLevelWords = new();  // Words for the current level
     private GameObject _boardLetterPrefab;
@@ -34,15 +33,6 @@ public class GameManager : MonoBehaviour
     {
         CancelInvoke(nameof(ShowLevelCompletePopup));
         Destroy(gameObject, 0.1f);
-    }
-
-
-    private void OnEnable()
-    {
-        _canvas = GameData.Instance.MainCanvas;
-
-        // Initialize word list for the current gameplay level
-
     }
 
     private void Start()
@@ -333,7 +323,7 @@ public class GameManager : MonoBehaviour
     private void ShowLevelCompletePopup()
     {
         GameObject levelComplete = Resources.Load<GameObject>("LevelCompletePopup");
-        Instantiate(levelComplete, _canvas.transform);
+        Instantiate(levelComplete, GameData.Instance.MainScreen.transform);
         _countMarksWords = 0;
 
         GameUIManager.Instance.StopCoroutine(GameUIManager.Instance._timerCoroutine);
@@ -344,7 +334,7 @@ public class GameManager : MonoBehaviour
         CancelInvoke(nameof(ShowLevelCompletePopup));
 
         GameObject levelComplete = Resources.Load<GameObject>("GameOverPopup");
-        Instantiate(levelComplete, _canvas.transform);
+        Instantiate(levelComplete, GameData.Instance.MainScreen.transform);
         _countMarksWords = 0;
     }
 
@@ -364,6 +354,7 @@ public class GameManager : MonoBehaviour
     }
     public void OnHintButtonClick(GameObject hintButton)
     {
+        AudioManager.Instance.PlayButtonClickSound();
         foreach (Transform word in _wordsContainer.transform)
         {
             // Find the first word that hasn't been completed

@@ -29,6 +29,8 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IPointerDownHan
 
     public static LetterDragController Instance;
 
+    [SerializeField] private AudioClip _selectedWordClip, _wrongMatchClip, _completedWordClip;
+
     public void Awake()
     {
         if (Instance == null)
@@ -554,6 +556,8 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IPointerDownHan
         _lastDraggedLetter = currentDraggedLetter;
 
         SetHint(drawLineColor);
+
+        StartCoroutine(AudioManager.Instance.PlaySound(_selectedWordClip));
     }
 
     public int GetDirection(string last, string current)
@@ -911,6 +915,12 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IPointerDownHan
                 selectedWord += item.GetComponent<Text>().text;
                 item.GetComponent<Text>().color = _selectedColor;
             }
+
+            StartCoroutine(AudioManager.Instance.PlaySound(_completedWordClip));
+        }
+        else 
+        {
+            StartCoroutine(AudioManager.Instance.PlaySound(_wrongMatchClip));
         }
 
         _drawLineRect.pivot = new Vector2(0.5f, 0.5f);

@@ -10,8 +10,11 @@ public class LevelComplete : MonoBehaviour
     [SerializeField] private Text _starCountText;
     [SerializeField] private Text _bonusCountText;
 
+    [SerializeField] private AudioClip _levelCompleteClip;
+
     private void OnEnable()
     {
+        StartCoroutine(AudioManager.Instance.PlaySound(_levelCompleteClip));
 
         transform.Find("BackgroundImage").GetComponent<RectTransform>().DOAnchorPos3D(Vector3.zero, 0.2f).SetEase(Ease.Flash);
 
@@ -26,6 +29,7 @@ public class LevelComplete : MonoBehaviour
 
     public void OnHomeButtonClick(GameObject homeButton)
     {
+        AudioManager.Instance.PlayButtonClickSound();
         GameManager.Instance.DestroyThisWindow();
         HomeScreen.Instance.gameObject.SetActive(true);
         transform.Find("BackgroundImage").GetComponent<RectTransform>().DOAnchorPos3D(new Vector3(1100, 0, 0), 0.2f).SetEase(Ease.Flash).OnComplete(() =>
@@ -36,6 +40,8 @@ public class LevelComplete : MonoBehaviour
 
     public void OnNextButtonClick(GameObject nextButton)
     {
+        AudioManager.Instance.PlayButtonClickSound();
+        
         LetterDragController.Instance.ClearAllDrawLines();
         LetterDragController.Instance.SetCellSize();
 
