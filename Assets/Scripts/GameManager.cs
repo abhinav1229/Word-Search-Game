@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     [Header("--- GameObjects ---")]
     [SerializeField] private GameObject _wordsContainer;
     [SerializeField] private GameObject _boardLetterContainer;
-    [SerializeField] private Canvas _canvas;
+    private Canvas _canvas;
 
     [HideInInspector] public List<string> CurrentLevelWords = new();  // Words for the current level
     private GameObject _boardLetterPrefab;
@@ -33,6 +33,8 @@ public class GameManager : MonoBehaviour
 
     private void OnEnable()
     {
+        _canvas = GameData.Instance.MainCanvas;
+
         // Initialize word list for the current gameplay level
 
     }
@@ -48,7 +50,6 @@ public class GameManager : MonoBehaviour
             Debug.LogError("One or more prefabs could not be loaded from Resources.");
             return;
         }
-
 
         StartGame();
     }

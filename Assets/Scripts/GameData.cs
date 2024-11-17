@@ -10,6 +10,8 @@ public class GameData : MonoBehaviour
 
     private LevelDataList _cachedLevelDataList; // Cached level data to avoid repeated file reads
 
+    public Canvas MainCanvas;
+
     private void Awake()
     {
         // Set up singleton pattern, ensuring a single instance persists across scenes
