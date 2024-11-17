@@ -162,6 +162,7 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IPointerDownHan
             return;
         }
 
+
         int directionChangeMultiplier = 1;
 
         if (IsTakenNonLinearWildMove(currentDraggedLetter.name) && direction != 5 && direction != 6 && direction != 7 && direction != 8)
@@ -169,6 +170,8 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IPointerDownHan
             Debug.Log("Dragging IsTakenNonLinearWildMove " + direction);
             return;
         }
+
+        StartCoroutine(AudioManager.Instance.PlaySound(_selectedWordClip));
 
         int distanceMultiplier = 1;
 
@@ -556,8 +559,6 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IPointerDownHan
         _lastDraggedLetter = currentDraggedLetter;
 
         SetHint(drawLineColor);
-
-        StartCoroutine(AudioManager.Instance.PlaySound(_selectedWordClip));
     }
 
     public int GetDirection(string last, string current)
@@ -845,6 +846,8 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IPointerDownHan
             return;
         }
 
+        StartCoroutine(AudioManager.Instance.PlaySound(_selectedWordClip));
+
         rayCastedObject.GetComponent<Text>().color = _selectedColor;
 
         Vector3 letterAnchors = rayCastedObject.GetComponent<RectTransform>().anchoredPosition3D;
@@ -920,7 +923,7 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IPointerDownHan
         }
         else 
         {
-            StartCoroutine(AudioManager.Instance.PlaySound(_wrongMatchClip));
+            // StartCoroutine(AudioManager.Instance.PlaySound(_wrongMatchClip));
         }
 
         _drawLineRect.pivot = new Vector2(0.5f, 0.5f);

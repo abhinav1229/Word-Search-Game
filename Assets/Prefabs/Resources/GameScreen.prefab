@@ -1923,8 +1923,8 @@ MonoBehaviour:
   _drawLine: {fileID: 4838429996213665561}
   _matchedDrawLine: {fileID: 3767202613646650880}
   _selecedWordHint: {fileID: 2712301814054848554}
-  _selectedWordClip: {fileID: 8300000, guid: 1adb9ef92e114894d80a314faac88431, type: 3}
-  _wrongMatchClip: {fileID: 8300000, guid: 70e8685cc18c6a04080ab9d176e59983, type: 3}
+  _selectedWordClip: {fileID: 8300000, guid: 0137b179837b03540ba0220100f4b05a, type: 3}
+  _wrongMatchClip: {fileID: 8300000, guid: a065e6b8e843e094b86818cc34943d8e, type: 3}
   _completedWordClip: {fileID: 8300000, guid: f58b6a6e016bb3244b28b5b0e42df107, type: 3}
 --- !u!114 &7298403499719847507
 MonoBehaviour:
