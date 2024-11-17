@@ -20,7 +20,8 @@ public class LevelComplete : MonoBehaviour
 
     public void OnHomeButtonClick(GameObject homeButton)
     {
-
+        GameManager.Instance.DestroyThisWindow();
+        HomeScreen.Instance.gameObject.SetActive(true);
         Destroy(gameObject, 0.1f);
     }
 

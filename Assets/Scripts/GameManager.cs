@@ -30,6 +30,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void DestroyThisWindow()
+    {
+        CancelInvoke(nameof(ShowLevelCompletePopup));
+        Destroy(gameObject, 0.1f);
+    }
+
 
     private void OnEnable()
     {

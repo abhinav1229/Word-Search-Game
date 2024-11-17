@@ -26,6 +26,12 @@ public class GameUIManager : MonoBehaviour
         SetUI();
     }
 
+    public void OnHomeButtonClick(GameObject homeButton)
+    {
+        GameObject gameOver = Resources.Load<GameObject>("SettingPopup");
+        Instantiate(gameOver, GameData.Instance.MainCanvas.transform);
+    }
+
     public void SetUI()
     {
         _timeRemaining = 20f;

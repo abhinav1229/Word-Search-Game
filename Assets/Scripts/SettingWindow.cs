@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class SettingWindow : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public void OnPlayButtonClick(GameObject button)
     {
-        
+        Destroy(gameObject, 0.1f);
     }
-
-    // Update is called once per frame
-    void Update()
+    public void OnHomeButtonClick(GameObject button)
     {
-        
+        GameManager.Instance.DestroyThisWindow();
+        HomeScreen.Instance.gameObject.SetActive(true);
+        Destroy(gameObject);
+    }
+    public void OnSoundButtonClick(GameObject button)
+    {
+        //add code...
     }
 }

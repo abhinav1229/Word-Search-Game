@@ -9,6 +9,16 @@ public class HomeScreen : MonoBehaviour
     [SerializeField] private Text _starCountText, _levelText;
     [SerializeField] RectTransform _resetWindow;
 
+    public static HomeScreen Instance;
+
+    private void Awake()
+    {
+        if(Instance == null)
+        {
+            Instance = this;
+        }
+    }
+
     private void OnEnable()
     {
         _levelText.text = "Level " + GameData.UnlockedLevel.ToString();
@@ -20,7 +30,7 @@ public class HomeScreen : MonoBehaviour
         GameObject gameScreen = Resources.Load<GameObject>("GameScreen");
         Instantiate(gameScreen, GameData.Instance.MainCanvas.transform);
 
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 
     public void OnResetGameButtonClick(GameObject resetButton)
