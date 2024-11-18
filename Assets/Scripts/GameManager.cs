@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -356,6 +357,16 @@ public class GameManager : MonoBehaviour
     {
         GameData.Instance.ObjectScaleAnimation(hintButton);
         AudioManager.Instance.PlayButtonClickSound();
+
+        if (GameData.StarsCount < 100)
+        {
+            hintButton.transform.Find("EnoughStarMessage").DOScale(Vector3.one, 0.2f).SetDelay(0.5f).OnComplete(() =>
+            {
+                hintButton.transform.Find("EnoughStarMessage").DOScale(Vector3.zero, 0.2f).SetDelay(3f);
+            });
+            return;
+        }
+
         foreach (Transform word in _wordsContainer.transform)
         {
             // Find the first word that hasn't been completed
@@ -494,6 +505,9 @@ public class GameManager : MonoBehaviour
                 Debug.LogError($"Invalid index {k} for letterObjects array.");
             }
         }
+
+        GameData.Instance.UpdateStarsCount(100, false);
+        GameUIManager.Instance.SetStarsCounts();
     }
 
 

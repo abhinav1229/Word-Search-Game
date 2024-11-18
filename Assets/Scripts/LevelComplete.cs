@@ -48,11 +48,12 @@ public class LevelComplete : MonoBehaviour
         GameData.Instance.ObjectScaleAnimation(nextButton);
         AudioManager.Instance.PlayButtonClickSound();
 
-        LetterDragController.Instance.ClearAllDrawLines();
-        LetterDragController.Instance.SetCellSize();
 
         transform.DORotate(Vector3.zero, 0).SetDelay(0.5f).OnComplete(() =>
         {
+            LetterDragController.Instance.ClearAllDrawLines();
+            LetterDragController.Instance.SetCellSize();
+
             GameUIManager.Instance.SetUI();
             GameManager.Instance.StartGame();
             transform.Find("BackgroundImage").GetComponent<RectTransform>().DOAnchorPos3D(new Vector3(1100, 0, 0), 0.2f).SetEase(Ease.Flash).OnComplete(() =>

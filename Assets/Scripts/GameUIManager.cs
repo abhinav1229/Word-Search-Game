@@ -69,7 +69,7 @@ public class GameUIManager : MonoBehaviour
         _levelText.text = "Level " + GameData.UnlockedLevel.ToString();
     }
 
-    private void SetStarsCounts()
+    public void SetStarsCounts()
     {
         _starCountsText.text = GameData.StarsCount.ToString();
     }
