@@ -13,7 +13,7 @@ public class HomeScreen : MonoBehaviour
 
     private void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
             Instance = this;
         }
@@ -27,33 +27,54 @@ public class HomeScreen : MonoBehaviour
 
     public void OnPlayButtonClick(GameObject playButton)
     {
-        AudioManager.Instance.PlayButtonClickSound();
-        GameObject gameScreen = Resources.Load<GameObject>("GameScreen");
-        Instantiate(gameScreen, GameData.Instance.MainScreen.transform);
-
+        GameData.Instance.ObjectScaleAnimation(playButton);
         _resetWindow.DOAnchorPos(new Vector3(0, -700f, 0), 0.5f).SetEase(Ease.InFlash);
-        gameObject.SetActive(false);
+
+        transform.DOScale(Vector3.one, 0f).SetDelay(0.5f).OnComplete(() =>
+        {
+            AudioManager.Instance.PlayButtonClickSound();
+            GameObject gameScreen = Resources.Load<GameObject>("GameScreen");
+            Instantiate(gameScreen, GameData.Instance.MainScreen.transform);
+
+            gameObject.SetActive(false);
+        });
+
     }
 
     public void OnResetGameButtonClick(GameObject resetButton)
     {
+        GameData.Instance.ObjectScaleAnimation(resetButton);
         AudioManager.Instance.PlayButtonClickSound();
-        _resetWindow.DOAnchorPos(new Vector3(0, 300f, 0), 0.3f).SetEase(Ease.InFlash);
+
+        transform.DORotate(Vector3.zero, 0).SetDelay(0.5f).OnComplete(() =>
+        {
+            _resetWindow.DOAnchorPos(new Vector3(0, 300f, 0), 0.3f).SetEase(Ease.InFlash);
+        });
+
     }
 
     public void OnYesButtonClick(GameObject yesButton)
     {
+        GameData.Instance.ObjectScaleAnimation(yesButton);
         AudioManager.Instance.PlayButtonClickSound();
         PlayerPrefs.DeleteAll();
-        _levelText.text = "Level " + GameData.UnlockedLevel.ToString();
-        _starCountText.text = GameData.StarsCount.ToString();
 
-        _resetWindow.DOAnchorPos(new Vector3(0, -700f, 0), 0.5f).SetEase(Ease.InFlash);
+        transform.DORotate(Vector3.zero, 0).SetDelay(0.5f).OnComplete(() =>
+        {
+            _levelText.text = "Level " + GameData.UnlockedLevel.ToString();
+            _starCountText.text = GameData.StarsCount.ToString();
+
+            _resetWindow.DOAnchorPos(new Vector3(0, -700f, 0), 0.5f).SetEase(Ease.InFlash);
+        });
     }
 
     public void OnNoButtonClick(GameObject noButton)
     {
+        GameData.Instance.ObjectScaleAnimation(noButton);
         AudioManager.Instance.PlayButtonClickSound();
-        _resetWindow.DOAnchorPos(new Vector3(0, -700f, 0), 0.5f).SetEase(Ease.InFlash);
+        transform.DORotate(Vector3.zero, 0).SetDelay(0.5f).OnComplete(() =>
+        {
+            _resetWindow.DOAnchorPos(new Vector3(0, -700f, 0), 0.5f).SetEase(Ease.InFlash);
+        });
     }
 }

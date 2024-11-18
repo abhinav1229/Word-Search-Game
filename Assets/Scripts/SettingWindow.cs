@@ -13,26 +13,37 @@ public class SettingWindow : MonoBehaviour
 
     public void OnPlayButtonClick(GameObject button)
     {
+        GameData.Instance.ObjectScaleAnimation(button);
         AudioManager.Instance.PlayButtonClickSound();
-        GameUIManager.Instance.ResumeCouroutine();
-        transform.Find("BackgroundImage").GetComponent<RectTransform>().DOAnchorPos3D(new Vector3(1100, 0, 0), 0.2f).SetEase(Ease.Flash).OnComplete(() =>
+
+        transform.DORotate(Vector3.zero, 0).SetDelay(0.5f).OnComplete(() =>
         {
-            Destroy(gameObject);
+            GameUIManager.Instance.ResumeCouroutine();
+            transform.Find("BackgroundImage").GetComponent<RectTransform>().DOAnchorPos3D(new Vector3(1100, 0, 0), 0.2f).SetEase(Ease.Flash).OnComplete(() =>
+            {
+                Destroy(gameObject);
+            });
         });
     }
     public void OnHomeButtonClick(GameObject button)
     {
+        GameData.Instance.ObjectScaleAnimation(button);
         AudioManager.Instance.PlayButtonClickSound();
-        GameManager.Instance.DestroyThisWindow();
-        HomeScreen.Instance.gameObject.SetActive(true);
-        transform.Find("BackgroundImage").GetComponent<RectTransform>().DOAnchorPos3D(new Vector3(1100, 0, 0), 0.2f).SetEase(Ease.Flash).OnComplete(() =>
+
+        transform.DORotate(Vector3.zero, 0).SetDelay(0.5f).OnComplete(() =>
         {
-            Destroy(gameObject);
+            GameManager.Instance.DestroyThisWindow();
+            HomeScreen.Instance.gameObject.SetActive(true);
+            transform.Find("BackgroundImage").GetComponent<RectTransform>().DOAnchorPos3D(new Vector3(1100, 0, 0), 0.2f).SetEase(Ease.Flash).OnComplete(() =>
+            {
+                Destroy(gameObject);
+            });
         });
 
     }
     public void OnSoundButtonClick(GameObject button)
     {
+        GameData.Instance.ObjectScaleAnimation(button);
         AudioManager.Instance.PlayButtonClickSound();
         GameData.Instance.SetSoundStatus();
     }

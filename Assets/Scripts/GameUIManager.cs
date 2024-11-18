@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class GameUIManager : MonoBehaviour
 {
@@ -28,11 +29,18 @@ public class GameUIManager : MonoBehaviour
 
     public void OnHomeButtonClick(GameObject homeButton)
     {
+        GameData.Instance.ObjectScaleAnimation(homeButton);
         AudioManager.Instance.PlayButtonClickSound();
-        GameObject gameOver = Resources.Load<GameObject>("SettingPopup");
-        Instantiate(gameOver, GameData.Instance.MainScreen.transform);
 
-        _isPaused = true;
+        transform.DORotate(Vector3.zero, 0).SetDelay(0.5f).OnComplete(() =>
+        {
+            // add some delay without using invoke or coroutine(so that object scale can be done)
+            GameObject gameOver = Resources.Load<GameObject>("SettingPopup");
+            Instantiate(gameOver, GameData.Instance.MainScreen.transform);
+
+            _isPaused = true;
+        });
+
     }
 
     public void ResumeCouroutine()
@@ -42,7 +50,7 @@ public class GameUIManager : MonoBehaviour
 
     public void SetUI()
     {
-        _timeRemaining = 20f;
+        _timeRemaining = GameData.Instance.GetLevelWiseTimeRemaining(GameData.UnlockedLevel);
         _isRunning = true;
 
         SetCurrentLevel();

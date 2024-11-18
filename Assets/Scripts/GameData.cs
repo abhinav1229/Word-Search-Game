@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using System.IO;
+using DG.Tweening;
 
 public class GameData : MonoBehaviour
 {
@@ -139,6 +140,19 @@ public class GameData : MonoBehaviour
         return new Vector2Int(100, 100);
     }
 
+    public float GetLevelWiseTimeRemaining(int level)
+    {
+        if (level <= 10)
+        {
+            return 30;
+        }
+        else if (level <= 25)
+        {
+            return 90;
+        }
+        return 120;
+    }
+
     public static int IsSoundEnabled
     {
         get
@@ -149,14 +163,30 @@ public class GameData : MonoBehaviour
 
     public void SetSoundStatus()
     {
-        if(IsSoundEnabled == 1)
+        if (IsSoundEnabled == 1)
         {
             PlayerPrefs.SetInt("SoundStatus", 0);
         }
-        else 
+        else
         {
             PlayerPrefs.SetInt("SoundStatus", 1);
         }
+    }
+
+    public void ObjectScaleAnimation(GameObject obj)
+    {
+        Vector3 objScale = obj.transform.localScale;
+
+        obj.transform.DOScale(new Vector3(objScale.x - 0.1f, objScale.x - 0.1f, objScale.x - 0.1f), 0.1f).OnComplete(() =>
+        {
+            obj.transform.DOScale(new Vector3(objScale.x + 0.1f, objScale.x + 0.1f,objScale.x + 0.1f), 0.2f).OnComplete(() =>
+            {
+                obj.transform.DOScale(new Vector3(objScale.x, objScale.x, objScale.x), 0.1f).OnComplete(() =>
+                {
+
+                });
+            });
+        });
     }
 }
 

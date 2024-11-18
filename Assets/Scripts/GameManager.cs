@@ -354,6 +354,7 @@ public class GameManager : MonoBehaviour
     }
     public void OnHintButtonClick(GameObject hintButton)
     {
+        GameData.Instance.ObjectScaleAnimation(hintButton);
         AudioManager.Instance.PlayButtonClickSound();
         foreach (Transform word in _wordsContainer.transform)
         {
