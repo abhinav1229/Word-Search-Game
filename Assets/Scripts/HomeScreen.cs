@@ -31,10 +31,10 @@ public class HomeScreen : MonoBehaviour
         GameData.Instance.ObjectScaleAnimation(playButton);
         _resetWindow.DOAnchorPos(new Vector3(0, -700f, 0), 0.5f).SetEase(Ease.InFlash);
         _developerWindow.DOAnchorPos(new Vector3(0, -1000f, 0), 0.5f).SetEase(Ease.InFlash);
+        AudioManager.Instance.PlayButtonClickSound();
 
         transform.DOScale(Vector3.one, 0f).SetDelay(0.5f).OnComplete(() =>
         {
-            AudioManager.Instance.PlayButtonClickSound();
             GameObject gameScreen = Resources.Load<GameObject>("GameScreen");
             Instantiate(gameScreen, GameData.Instance.MainScreen.transform);
 

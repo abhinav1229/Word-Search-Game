@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class LetterDragController : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler
 {
@@ -172,6 +173,9 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IPointerDownHan
         }
 
         StartCoroutine(AudioManager.Instance.PlaySound(_selectedWordClip));
+        currentDraggedLetter.transform.DOScale(new Vector3(1.2f, 1.2f, 1.2f), 0.3f).OnComplete(() => {
+            currentDraggedLetter.transform.DOScale(new Vector3(1f, 1f, 1f), 0.2f);
+        });
 
         int distanceMultiplier = 1;
 
@@ -552,7 +556,7 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IPointerDownHan
 
         if (GameData.UnlockedLevel <= 10)
         {
-            drawLineSizeRect.y = 90;
+            drawLineSizeRect.y = 100;
         }
 
         _drawLineRect.sizeDelta = drawLineSizeRect;
@@ -854,7 +858,7 @@ public class LetterDragController : MonoBehaviour, IDragHandler, IPointerDownHan
         _drawLineRect.sizeDelta = _drawLineDefaultSize;
         if (GameData.UnlockedLevel <= 10)
         {
-            _drawLineRect.sizeDelta = new Vector3(90, 90, 0);
+            _drawLineRect.sizeDelta = new Vector3(100, 100, 0);
         }
         _drawLineRect.anchoredPosition = letterAnchors;
         drawLineColor = GetRandomColor();

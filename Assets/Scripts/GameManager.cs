@@ -311,6 +311,9 @@ public class GameManager : MonoBehaviour
             if (word.GetComponent<Text>().text.Equals(matchedWord))
             {
                 _countMarksWords += 1;
+                Color32 currentColor = word.GetComponent<Text>().color;
+                currentColor.a = 130;
+                word.GetComponent<Text>().color = currentColor;
                 word.GetChild(0).gameObject.SetActive(true);
             }
         }
