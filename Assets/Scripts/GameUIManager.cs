@@ -10,6 +10,8 @@ public class GameUIManager : MonoBehaviour
     [SerializeField] private Text _timerText;
     [SerializeField] private Text _starCountsText;
 
+    [SerializeField] RectTransform _wordsContainer, _gamePlayPanel, _bottomPanel;
+
     public Coroutine _timerCoroutine;
 
     public static GameUIManager Instance;
@@ -20,11 +22,16 @@ public class GameUIManager : MonoBehaviour
         {
             Instance = this;
         }
+        _wordsContainer.localScale = Vector3.zero;
     }
 
     private void OnEnable()
     {
-        SetUI();
+        SetUI(true);
+
+        _gamePlayPanel.DOAnchorPos(new Vector3(0, -130f, 0), 0.3f).SetEase(Ease.InFlash);
+        _wordsContainer.DOScale(Vector3.one, 0.5f).SetDelay(0.4f);
+        _bottomPanel.DOAnchorPos(new Vector3(0, 160f, 0), 0.3f).SetDelay(1.0f);
     }
 
     public void OnHomeButtonClick(GameObject homeButton)
@@ -48,8 +55,16 @@ public class GameUIManager : MonoBehaviour
         _isPaused = false;
     }
 
-    public void SetUI()
+    public void SetUI(bool isFromEnable = false)
     {
+        if (!isFromEnable)
+        {
+            _wordsContainer.DOScale(Vector3.zero, 0.2f).OnComplete(() =>
+            {
+                _wordsContainer.DOScale(Vector3.one, 0.3f);
+            });
+        }
+
         _timeRemaining = GameData.Instance.GetLevelWiseTimeRemaining(GameData.UnlockedLevel);
         _isRunning = true;
 

@@ -9,7 +9,7 @@
       { "levelName": 7, "words": ["APART", "PANIC", "HURT", "FEAR", "MILD"] },
       { "levelName": 8, "words": ["PEACE", "QUIET", "DEATH", "SMUG", "HOPE"] },
       { "levelName": 9, "words": ["BIRD", "FIRE", "EARTH", "WIND", "SKY"] },
-      { "levelName": 10, "words": ["SITAR", "DRUM", "FLUTE", "PIANO", "AMATI"] },
+      { "levelName": 10, "words": ["SITAR", "DRUM", "FLUTE", "PIANO", "AMATI", "GUITAR", "VIOLIN", "TABLA", "HARP"] },
       
       { "levelName": 11, "words": ["MELODY", "CHAMBER", "PAINT", "JAZZ", "OPERA", "HYMN"] },
       { "levelName": 12, "words": ["TEACHER", "STUDENT", "CLASS", "INVOICE", "COUNTER", "BENCH"] },
